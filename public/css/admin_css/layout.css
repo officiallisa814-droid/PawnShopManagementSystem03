@@ -1,0 +1,68 @@
+/* កំណត់ទម្រង់ដើមដំបូង */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+body {
+    background-color: #f4f6f9;
+}
+/* រៀបចំប្រអប់ធំឱ្យចេញជា ២ ជួរឈរ (Sidebar ឆ្វេង និង Content ស្ដាំ) */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+/* តុបតែង Sidebar ខាងឆ្វេង */
+.sidebar {
+    width: 260px;
+    background-color: #0b2240; /* ពណ៌ខៀវចាស់ */
+    color: #fff;
+    padding: 25px 20px;
+    display: flex;
+    flex-direction: column;
+}
+.sidebar .logo { margin-bottom: 35px; }
+.sidebar .logo h2 { font-size: 22px; color: #fff; }
+.sidebar .logo p { font-size: 12px; color: #718096; }
+
+.sidebar .menu-links a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #a0aec0;
+    padding: 12px 15px;
+    text-decoration: none;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+.sidebar .menu-links a:hover, .sidebar .menu-links a.active {
+    background-color: #1e74ff;
+    color: #fff;
+}
+/* តុបតែងផ្នែកខាងស្ដាំ */
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.top-header {
+    background-color: #fff;
+    height: 70px;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e2e8f0;
+}
+.search-bar input {
+    padding: 8px 15px;
+    width: 300px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+}
+.user-profile { display: flex; align-items: center; gap: 20px; }
+.content-body { padding: 30px; }

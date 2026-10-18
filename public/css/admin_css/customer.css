@@ -1,0 +1,1003 @@
+/* --- Outer Container Structuring --- */
+.customer-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Header Row Flex layout */
+.directory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.directory-title {
+    color: #0f172a;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 12px;
+}
+
+/* Base button parameters */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-add {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+.btn-add:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-view {
+    background-color: #1e293b;
+    color: #ffffff;
+}
+.btn-view:hover {
+    background-color: #0f172a;
+}
+
+.btn-export {
+    background-color: #64748b;
+    color: #ffffff;
+}
+.btn-export:hover {
+    background-color: #475569;
+}
+
+/* --- White Card panel background details --- */
+.directory-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+/* --- Filter Layout Controls --- */
+.filter-section {
+    padding: 24px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.filter-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.filter-subtitle {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 2px;
+    margin-bottom: 16px;
+}
+
+.filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Search Box Container Layouts */
+.input-wrapper {
+    position: relative;
+    width: 260px;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 8px 12px 8px 36px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #334155;
+    outline: none;
+    background-color: #f8fafc;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 0.875rem;
+}
+
+.layer-filter-btn {
+    background: none;
+    border: none;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.directory-card {
+    overflow: visible;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+/* --- Layer Filters Dropdown --- */
+.layer-filter-wrapper {
+    position: relative;
+}
+
+.layer-filter-btn {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    padding: 8px 14px;
+    color: #475569;
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+/* dropdown sort */
+.layer-filter-btn:hover,
+.layer-filter-btn.open {
+    background: #eef2ff;
+    border-color: #2563eb;
+    color: #2563eb;
+}
+
+.layer-chevron {
+    font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+.layer-filter-btn.open .layer-chevron {
+    transform: rotate(180deg);
+}
+
+/* លាក់ជាលំនាំដើម */
+.layer-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 280px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+    padding: 16px;
+    z-index: 100;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-6px);
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease,
+        visibility 0.2s ease;
+}
+.layer-dropdown.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.layer-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+.layer-field label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.layer-field input,
+.layer-field select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #334155;
+    background: #f8fafc;
+    outline: none;
+}
+.layer-field input:focus,
+.layer-field select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.layer-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 12px;
+}
+.layer-reset-btn,
+.layer-close-btn {
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.layer-reset-btn {
+    background: #f1f5f9;
+    color: #475569;
+}
+.layer-reset-btn:hover {
+    background: #e2e8f0;
+}
+.layer-close-btn {
+    background: #2563eb;
+    color: #fff;
+}
+.layer-close-btn:hover {
+    background: #1d4ed8;
+}
+
+/* កុំឱ្យ dropdown ត្រូវកាត់ */
+.directory-card {
+    overflow: visible;
+}
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* --- Data Table Segment Structuring --- */
+.table-title {
+    padding: 20px 24px 8px 24px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.customer-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.customer-table th {
+    background-color: #ffffff;
+    color: #fff;
+    font-size: 0.815rem;
+    font-weight: 600;
+    padding: 14px 24px;
+    text-align: left;
+    border-bottom: 2px solid #f1f5f9;
+    background-color: #2563eb;
+}
+
+.customer-table td {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.875rem;
+    color: #334155;
+    vertical-align: middle;
+}
+
+.customer-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+/* Column customization overrides */
+.id-col {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.name-col {
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.pledge-count {
+    text-align: center;
+    font-weight: 500;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Checkbox alignment style modifications */
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #2563eb;
+    cursor: pointer;
+}
+
+/* --- Custom Status Badge Elements --- */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    min-width: 75px;
+}
+
+.badge.active-badge {
+    background-color: #dcfce7;
+    color: #15803d;
+}
+
+.badge.inactive-badge {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Actions Menu Dot Trigger style settings */
+.action-cell {
+    color: #94a3b8;
+    cursor: pointer;
+    text-align: center;
+}
+.action-cell:hover {
+    color: #475569;
+}
+/* រៀបចំទីតាំងឲ្យប្រអប់មេ */
+.action-cell {
+    position: relative;
+    cursor: pointer;
+}
+
+/*==================== pop up update ===============  */
+/* =========================================================================
+   🌟 CSS រចនាផ្ទាំង Pop-up កែប្រែថ្មី (Advanced Separate Update Modal)
+   ========================================================================= */
+
+/* ផ្ទាំងផ្ទៃខាងក្រោយងងឹតចាក់សោរអេក្រង់ */
+.separate-modal-backdrop {
+    display: none !important; 
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(
+        15,
+        23,
+        42,
+        0.4
+    ) !important; /* បាំងផ្ទៃក្រោយឲ្យងងឹតល្មម */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 999999 !important; /* ធានាអណ្តែតលើគេបង្អស់ជានិច្ច */
+}
+
+/* បន្ទះកាតផ្ទាំង Pop-up មេ */
+.separate-modal-card {
+    background: #ffffff !important;
+    width: 100% !important;
+    max-width: 650px !important; /* ទំហំទទឹងល្មមសមស្របនឹងទម្រង់ Form ៤ ផ្នែក */
+    border-radius: 12px !important;
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+    overflow: hidden !important;
+    animation: sepModalScale 0.2s ease-out !important;
+}
+
+/* ចលនាទាញផ្ទាំងឲ្យលោតមកទន់ភ្លន់ (Animation Effects) */
+@keyframes sepModalScale {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* ផ្នែកក្បាលដកស្រង់ចំណងជើង */
+.separate-modal-header {
+    padding: 16px 20px !important;
+    background-color: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+}
+
+/* ផ្នែកតួខ្លួន Form មានប្រព័ន្ធ Scroll Container អូតូពេលអេក្រង់តូច */
+.separate-modal-body {
+    padding: 20px !important;
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+}
+
+/* ផ្នែកបាតក្រោមដាក់ប៊ូតុង Actions */
+.separate-modal-footer {
+    padding: 14px 20px !important;
+    background-color: #f8fafc !important;
+    border-top: 1px solid #e2e8f0 !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+}
+
+/* ចំណងជើងបំបែក Sections ទាំង ៤ */
+.sep-section-title {
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: #1e293b !important;
+    padding-bottom: 6px !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+    margin: 18px 0 12px 0 !important;
+    text-align: left !important;
+}
+.sep-section-title:first-child {
+    margin-top: 0 !important;
+}
+
+/* ប្រព័ន្ធទម្រង់ Grid បំបែកជា ២ ជួរទន្ទឹមគ្នា */
+.sep-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+}
+
+/* ប្រអប់គ្របដណ្តប់ Input នីមួយៗ */
+.sep-group {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 5px !important;
+    text-align: left !important;
+    margin-bottom: 8px !important;
+}
+.sep-group.full-width {
+    grid-column: span 2 !important; /* បង្ខំឱ្យរីកពេញទទឹង */
+}
+.sep-group label {
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    color: #475569 !important;
+}
+.sep-group input,
+.sep-group select,
+.sep-group textarea {
+    width: 100% !important;
+    padding: 9px 12px !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 6px !important;
+    outline: none !important;
+    font-size: 13.5px !important;
+    box-sizing: border-box !important;
+    background-color: #ffffff !important;
+}
+.sep-group input:focus,
+.sep-group select:focus,
+.sep-group textarea:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+/* រចនាម៉ូដប៊ូតុង Actions ខាងក្រោម */
+.sep-btn {
+    padding: 9px 18px !important;
+    border-radius: 6px !important;
+    border: none !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease;
+}
+.sep-btn-cancel {
+    background-color: #e2e8f0 !important;
+    color: #475569 !important;
+}
+.sep-btn-cancel:hover {
+    background-color: #cbd5e1 !important;
+}
+.sep-btn-save {
+    background-color: #2563eb !important;
+    color: #ffffff !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+.sep-btn-save:hover {
+    background-color: #1d4ed8 !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* =============Hover Icon(...) Show icon delete and update============ */
+/* កូដ CSS កែសម្រួលពិសេស៖ បង្ខំឱ្យផ្ទាំង Icons លោតទៅអណ្តែតចំពីលើ Icon ... ចំបេះបិទ ១០០% */
+.action-popover-menu.horizontal-icons {
+    position: absolute !important;
+    right: 0 !important; /* តម្រឹមគែមខាងស្តាំឲ្យស្មើគ្នា */
+
+    /*  ដំណោះស្រាយដាច់ខាត៖ ប្រើប្រាស់រូបមន្ត 50% ដើម្បីចាប់ទាញឲ្យលោតទៅអណ្តែតចំពីលើ ... ស្វ័យប្រវត្ត */
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+
+    width: 70px !important; /* ទទឹងតូចល្មមសមស្របនឹងរូប Icons ទាំងពីរ */
+    background-color: #ffffff !important;
+    border: 1px solid #cbd5e1 !important;
+    border-radius: 8px !important;
+    box-shadow:
+        0 10px 15px -3px rgba(0, 0, 0, 0.1),
+        0 4px 6px -4px rgba(0, 0, 0, 0.05) !important;
+    z-index: 99999 !important;
+
+    display: none; /* លាក់ទុកសិន */
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important; /* គម្លាតកណ្តាលរវាង Icon ទាំងពីរ */
+    padding: 6px !important;
+}
+
+/* គោះឱ្យលោតចេញមកជាជួរដេកទន្ទឹមគ្នា និងរក្សាទីតាំងចំកណ្តាលពីលើ ... ពេល Hover */
+.action-cell:hover .action-popover-menu.horizontal-icons {
+    display: flex !important; /* បើកបង្ហាញជា Flex លោតទៅបាំងពីលើ ... ភ្លាម */
+}
+
+/* រចនាម៉ូដប៊ូតុងមានតែរូប Icons */
+.icon-only-btn {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 6px !important;
+    border: none !important;
+    background: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 15px !important;
+    cursor: pointer !important;
+    transition: all 0.15s ease;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* ពណ៌ Effect ពេលយកម៉ៅដាក់លើប៊ូតុងកែប្រែ */
+.edit-btn-icon {
+    color: #2563eb !important;
+}
+.edit-btn-icon:hover {
+    background-color: #eff6ff !important;
+    color: #1d4ed8 !important;
+}
+
+/* ពណ៌ Effect ពេលយកម៉ៅដាក់លើប៊ូតុងលុប */
+.delete-btn-icon {
+    color: #dc2626 !important;
+}
+.delete-btn-icon:hover {
+    background-color: #fef2f2 !important;
+    color: #b91c1c !important;
+}
+.adv-modal-backdrop {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.4) !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999 !important;
+}
+.adv-modal-card {
+    background: #ffffff !important;
+    width: 100%;
+    max-width: 520px;
+    border-radius: 12px !important;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+    overflow: hidden;
+    animation: advModalScale 0.2s ease-out;
+}
+@keyframes advModalScale {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+.adv-modal-header {
+    padding: 16px 20px;
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.adv-modal-body {
+    padding: 24px;
+}
+.adv-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+}
+.adv-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+.adv-form-group.full-width {
+    grid-column: span 2;
+}
+.adv-form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+.adv-form-group input,
+.adv-form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    outline: none;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+.adv-form-group input:focus,
+.adv-form-group select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+.adv-form-group input[readonly] {
+    background-color: #f8fafc;
+    color: #64748b;
+    cursor: not-allowed;
+}
+.adv-modal-footer {
+    padding: 14px 20px;
+    background-color: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+.adv-btn {
+    padding: 10px 18px;
+    border-radius: 6px;
+    border: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.adv-btn-cancel {
+    background-color: #e2e8f0;
+    color: #475569;
+}
+.adv-btn-cancel:hover {
+    background-color: #cbd5e1;
+}
+.adv-btn-save {
+    background-color: #2563eb;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.adv-btn-save:hover {
+    background-color: #1d4ed8;
+}
+
+/* ====================================================  */
+
+/* --- Modal Overlay Layout Panel Settings --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(
+        15,
+        23,
+        42,
+        0.6
+    ); /* Dark translucent background shadow */
+    backdrop-filter: blur(4px); /* Modern soft premium backdrop blur */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999; /* Higher position depth index level over your sticky sidebars */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    visibility: hidden;
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+/* Toggle selector utility to pop panel open */
+.modal-overlay.show-modal {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+}
+
+/* --- Card container details --- */
+.modal-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 750px; /* ពង្រីកប្រអប់ពី 520px ទៅ 750px ដើម្បីចេញជាពីរជួរស្អាត */
+    border-radius: 12px;
+    box-shadow:
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    transform: scale(0.95);
+    transition: transform 0.25s ease;
+    overflow: hidden;
+    max-height: 90vh; /* កំណត់កម្ពស់ខ្ពស់បំផុតត្រឹម ៩០% នៃអេក្រង់ */
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.khmer-os {
+    font-family: "Khmer OS", "Khmer OS System", "Noto Sans Khmer", sans-serif;
+}
+
+.form-scroll-container {
+    padding: 24px;
+    overflow-y: auto; /* បង្កើតរបារ Scroll ស្វ័យប្រវត្តិនៅពេលព័ត៌មានវែង */
+    flex: 1;
+}
+
+.modal-overlay.show-modal .modal-card {
+    transform: scale(1);
+}
+
+/* Modal Title Header Alignment layout styling */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #0b2240;
+}
+
+.modal-header h3 {
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 1.75rem;
+    color: #94a3b8;
+    cursor: pointer;
+    line-height: 1;
+}
+.close-modal-btn:hover {
+    color: #64748b;
+}
+
+/* --- Input Fields Layout Form Grid Components --- */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Prevents container leaks */
+    flex: 1;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.form-section-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1e3a8a; /* ពណ៌ខៀវ */
+    text-transform: uppercase;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-scroll-container {
+    padding: 24px;
+    overflow-y: auto; /* ⚠️ This activates the scrollbar internally */
+    flex: 1;
+}
+
+.form-section-title:first-child {
+    margin-top: 0;
+}
+
+/* តុបតែងវាលអត្ថបទវែង Textarea */
+.form-group textarea {
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #1e293b;
+    outline: none;
+    background-color: #ffffff;
+    font-family: inherit;
+    resize: vertical;
+}
+
+.form-group textarea:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* តុបតែងវាល Upload ឯកសារ File Input */
+.form-group input[type="file"] {
+    background-color: #f8fafc;
+    cursor: pointer;
+    padding: 6px 12px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group.full-width {
+    grid-column: span 2;
+}
+
+.form-group label {
+    font-size: 0.815rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: #1e293b;
+    outline: none;
+    background-color: #ffffff;
+    transition: border-color 0.15s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* --- Control Footer Action row properties --- */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #0b2240;
+    padding: 10px;
+    background-color: #0b2240;
+    align-items: center;
+}
+
+.btn-cancel {
+    background-color: #f1f5f9;
+    color: #475569;
+    border: none;
+    padding: 5px 18px;
+    border-radius: 6px;
+    font-size: 0.675rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-cancel:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-submit {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    padding: 5px 18px;
+    border-radius: 6px;
+    font-size: 0.675rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-submit:hover {
+    background-color: #1d4ed8;
+}
+.error-message {
+    display: block;
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+}
+.form-group input.input-error,
+.form-group select.input-error,
+.form-group textarea.input-error {
+    border-color: #dc2626 !important;
+    background-color: #fef2f2;
+}
+.alert-error {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 13px;
+}
+.alert-error ul {
+    margin: 6px 0 0 18px;
+    padding: 0;
+}
+.alert-success {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #15803d;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+}
