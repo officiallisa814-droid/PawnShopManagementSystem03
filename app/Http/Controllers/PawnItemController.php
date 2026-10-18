@@ -120,8 +120,17 @@ class PawnItemController extends Controller
             'accessories' => 'nullable|string|max:255',
             'market_value' => 'required|numeric|min:0',
             'condition_details' => 'nullable|string',
+            'item_photo' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
             'photos.*' => 'nullable|image|mimes:jpeg,png,jpg|max:4096',
         ]);
+        if ($request->hasFile('item_photo')) {
+            if ($item->item_photo) {
+                Storage::disk('public')->delete($item->item_photo);   // លុបរូបចាស់ (បើមាន)
+            }
+            $item->update([
+                'item_photo' => $request->file('item_photo')->store('pawn_items', 'public'),
+            ]);
+        }
 
         $item->update([
             'category' => $data['category'],
@@ -148,4 +157,14 @@ class PawnItemController extends Controller
 
         return redirect()->route('pawnItem.show', $id)->with('success', 'បានលុបរូបរួចរាល់!');
     }
+
+    public function destroyMainPhoto(PawnItem $item)
+{
+    if ($item->item_photo) {
+        Storage::disk('public')->delete($item->item_photo);
+        $item->update(['item_photo' => null]);
+    }
+
+    return redirect()->route('pawnItem.show', $item->id)->with('success', 'បានលុបរូបមុខរួចរាល់!');
+}
 }

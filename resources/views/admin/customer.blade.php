@@ -16,7 +16,8 @@
             <div class="action-buttons">
                 <button type="button" class="btn btn-add"><i class="fa-solid fa-plus"></i> Add New Customer</button>
                 <button class="btn btn-view"><i class="fa-solid fa-user-slash"></i> View Blacklist</button>
-                <button class="btn btn-export"><i class="fa-solid fa-download"></i> Export Report</button>
+                <button type="button" class="btn btn-export" id="exportBtn"><i class="fa-solid fa-download"></i> Export
+                    Report (.csv)</button>
             </div>
         </div>
 
@@ -84,10 +85,31 @@
                     </thead>
                     <tbody id="customer-table-body">
                         @forelse($customers as $customer)
+                            @php
+                                $exportRow = [
+                                    $customer->id,
+                                    $customer->customer_name,
+                                    $customer->gender == 'M' ? 'Male' : 'Female',
+                                    optional($customer->dob)->format('d/m/Y'),
+                                    $customer->passport_id,
+                                    $customer->phone_number,
+                                    $customer->email,
+                                    $customer->address_house,
+                                    $customer->address_street,
+                                    $customer->address_village,
+                                    $customer->address_district,
+                                    $customer->address_province,
+                                    $customer->guarantor_name,
+                                    $customer->guarantor_phone,
+                                    ucfirst($customer->customer_type),
+                                    ucfirst($customer->customer_status),
+                                    $customer->pawnItems->count(),
+                                ];
+                            @endphp
                             <tr onclick="window.location='{{ route('customer.show', $customer->id) }}'" style="cursor: pointer;"
                                 data-province="{{ strtolower($customer->address_province ?? '') }}"
-                                data-status="{{ strtolower($customer->customer_status ?? '') }}"
-                                data-index="{{ $loop->index }}">
+                                data-status="{{ strtolower($customer->customer_status ?? '') }}" data-index="{{ $loop->index }}"
+                                data-export="{{ json_encode($exportRow, JSON_UNESCAPED_UNICODE) }}">
                                 <td onclick="event.stopPropagation();"><input type="checkbox" value="{{ $customer->id }}"></td>
                                 <td class="id-col">{{ $customer->id }}</td>
 
@@ -104,8 +126,11 @@
                                             </div>
                                         @endif
                                         <span style="color: #2563eb; font-weight: 600;">{{ $customer->customer_name }}</span>
+                                        <!-- <span class="sub-id">{{ $customer->passport_id ?? '' }}</span> -->
                                     </div>
                                 </td>
+
+
 
                                 <td>{{ $customer->passport_id ?? 'N/A' }}</td>
                                 <td>{{ $customer->phone_number }}</td>
@@ -118,7 +143,7 @@
                                     @endif
                                 </td>
                                 <!-- <td class="action-cell" onclick="event.stopPropagation();"><i class="fa-solid fa-ellipsis"></i>
-                                                                                                                </td> -->
+                                                                                                                                </td> -->
                                 <!-- ======== Prarents icon (...)========= -->
                                 <td class="action-cell" onclick="event.stopPropagation();">
                                     <!-- ប៊ូតុងមេ Ellipsis (...) នឹងប្តូរមកជាជួរប៊ូតុងបញ្ជាទន្ទឹមគ្នាភ្លាមៗពេល Hover -->
@@ -553,5 +578,5 @@
 
 @endsection
 @push('scripts')
-<script src="{{ asset('js/customer.js') }}"></script>
+    <script src="{{ asset('js/customer.js') }}"></script>
 @endpush

@@ -116,3 +116,147 @@
     background: #2563eb;
     color: #fff;
 }
+/* ===== ពណ៌ badge ត្រឹមត្រូវ ===== */
+.d-badge.b-paid {
+    background: #d1fae5;
+    color: #065f46;
+}
+.d-badge.b-overdue {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+.d-badge.b-unpaid {
+    background: #dbeafe;
+    color: #1e40af;
+}
+.lock {
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+/* កុំឱ្យតារាងរុញទំព័រ */
+.d-wrap > div {
+    min-width: 0;
+}
+.d-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* ===== Pay modal ===== */
+.pm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.pm-overlay.show {
+    display: flex;
+}
+.pm-box {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    padding: 22px;
+}
+.pm-box h3 {
+    margin: 0 0 4px;
+    color: #0b2240;
+}
+.pm-box p {
+    margin: 0 0 12px;
+    font-size: 13px;
+    color: #64748b;
+}
+.pm-box label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    margin: 10px 0 4px;
+}
+.pm-box input,
+.pm-box select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+.pm-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+}
+.pm-actions button {
+    flex: 1;
+    padding: 11px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    background: #f1f5f9;
+    color: #475569;
+}
+.pm-actions .ok {
+    background: #2563eb;
+    color: #fff;
+}
+
+.flash {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    padding: 10px 16px;
+    border-radius: 6px;
+    color: #fff;
+    z-index: 10001;
+    max-width: 90vw;
+}
+.flash.ok {
+    background: #15803d;
+}
+.flash.err {
+    background: #b91c1c;
+}
+
+/* ===== Mobile ===== */
+@media (max-width: 900px) {
+    .d-card {
+        padding: 14px;
+        margin-bottom: 14px;
+    }
+    .d-top {
+        gap: 8px;
+    }
+    .d-top .d-btn {
+        flex: 1;
+        text-align: center;
+        padding: 11px 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .d-row {
+        font-size: 13px;
+        padding: 7px 0;
+    }
+    .d-table {
+        font-size: 12.5px;
+        min-width: 560px;
+    }
+    .d-table th,
+    .d-table td {
+        padding: 8px 8px;
+        white-space: nowrap;
+    }
+    .d-btn.blue.js-pay {
+        padding: 9px 16px;
+    }
+}

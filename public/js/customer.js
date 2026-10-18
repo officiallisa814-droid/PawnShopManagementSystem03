@@ -347,31 +347,33 @@ document.addEventListener("DOMContentLoaded", function () {
 // 🌟 មុខងារបញ្ជាសកល (Global Event Delegation) ធានាចុចដើរលោតភ្លាមៗ ១០០% ទោះបីជាតារាងលោតតាម AJAX ក៏ដោយ
 document.addEventListener("click", function (e) {
     // ស្វែងរកប៊ូតុង Edit តាមរយៈ Class ផ្លូវការ ឬ Class រូបខ្មៅដៃ
-    const btn = e.target.closest(".btn-trigger-advanced-edit") || e.target.closest(".edit-btn-icon");
+    const btn =
+        e.target.closest(".btn-trigger-advanced-edit") ||
+        e.target.closest(".edit-btn-icon");
     if (!btn) return; // បើមិនមែនចុចចំប៊ូតុង Edit ទេ មិនបាច់ធ្វើការឡើយ
 
     e.preventDefault();
     e.stopPropagation();
 
     // ១. ទាញយកទិន្នន័យចេញពី data-* របស់ប៊ូតុងដែលបានចុច
-    const id = btn.getAttribute('data-id') || btn.dataset.id;
-    const name = btn.getAttribute('data-name') || btn.dataset.name;
-    const gender = btn.getAttribute('data-gender') || btn.dataset.gender;
-    const dob = btn.getAttribute('data-dob') || btn.dataset.dob;
-    const phone = btn.getAttribute('data-phone') || btn.dataset.phone;
-    const passport = btn.getAttribute('data-passport') || btn.dataset.passport;
-    const email = btn.getAttribute('data-email') || btn.dataset.email;
-    const house = btn.getAttribute('data-house') || btn.dataset.house;
-    const street = btn.getAttribute('data-street') || btn.dataset.street;
-    const village = btn.getAttribute('data-village') || btn.dataset.village;
-    const district = btn.getAttribute('data-district') || btn.dataset.district;
-    const province = btn.getAttribute('data-province') || btn.dataset.province;
-    const gName = btn.getAttribute('data-gname') || btn.dataset.gname;
-    const gPhone = btn.getAttribute('data-gphone') || btn.dataset.gphone;
-    const pledges = btn.getAttribute('data-pledges') || btn.dataset.pledges;
-    const type = btn.getAttribute('data-type') || btn.dataset.type;
-    const status = btn.getAttribute('data-status') || btn.dataset.status;
-    const notes = btn.getAttribute('data-notes') || btn.dataset.notes;
+    const id = btn.getAttribute("data-id") || btn.dataset.id;
+    const name = btn.getAttribute("data-name") || btn.dataset.name;
+    const gender = btn.getAttribute("data-gender") || btn.dataset.gender;
+    const dob = btn.getAttribute("data-dob") || btn.dataset.dob;
+    const phone = btn.getAttribute("data-phone") || btn.dataset.phone;
+    const passport = btn.getAttribute("data-passport") || btn.dataset.passport;
+    const email = btn.getAttribute("data-email") || btn.dataset.email;
+    const house = btn.getAttribute("data-house") || btn.dataset.house;
+    const street = btn.getAttribute("data-street") || btn.dataset.street;
+    const village = btn.getAttribute("data-village") || btn.dataset.village;
+    const district = btn.getAttribute("data-district") || btn.dataset.district;
+    const province = btn.getAttribute("data-province") || btn.dataset.province;
+    const gName = btn.getAttribute("data-gname") || btn.dataset.gname;
+    const gPhone = btn.getAttribute("data-gphone") || btn.dataset.gphone;
+    const pledges = btn.getAttribute("data-pledges") || btn.dataset.pledges;
+    const type = btn.getAttribute("data-type") || btn.dataset.type;
+    const status = btn.getAttribute("data-status") || btn.dataset.status;
+    const notes = btn.getAttribute("data-notes") || btn.dataset.notes;
 
     const advForm = document.getElementById("advancedUpdateForm");
     if (!advForm) {
@@ -383,33 +385,69 @@ document.addEventListener("click", function (e) {
     advForm.action = "/customer/" + id + "/update";
 
     // ៣. បាញ់ទិន្នន័យចាស់ចូលទៅក្នុងប្រអប់ Inputs នីមួយៗនៃផ្ទាំង Pop-up ថ្មី
-    if (document.getElementById("sep_customer_name"))   document.getElementById("sep_customer_name").value = name || "";
-    if (document.getElementById("sep_gender"))          document.getElementById("sep_gender").value = gender ? gender : "";
-    if (document.getElementById("sep_dob"))             document.getElementById("sep_dob").value = dob ? dob : "";
-    if (document.getElementById("sep_phone_number"))    document.getElementById("sep_phone_number").value = (phone && phone !== "null") ? phone : "";
-    if (document.getElementById("sep_passport_id"))     document.getElementById("sep_passport_id").value = (passport && passport !== "null") ? passport : "";
-    if (document.getElementById("sep_email"))           document.getElementById("sep_email").value = (email && email !== "null") ? email : "";
-    
-    if (document.getElementById("sep_address_house"))   document.getElementById("sep_address_house").value = (house && house !== "null") ? house : "";
-    if (document.getElementById("sep_address_street"))  document.getElementById("sep_address_street").value = (street && street !== "null") ? street : "";
-    if (document.getElementById("sep_address_village")) document.getElementById("sep_address_village").value = (village && village !== "null") ? village : "";
-    if (document.getElementById("sep_address_district"))document.getElementById("sep_address_district").value = (district && district !== "null") ? district : "";
-    if (document.getElementById("sep_address_province"))document.getElementById("sep_address_province").value = (province && province !== "null") ? province : "";
-    
-    if (document.getElementById("sep_guarantor_name"))  document.getElementById("sep_guarantor_name").value = (gName && gName !== "null") ? gName : "";
-    if (document.getElementById("sep_guarantor_phone")) document.getElementById("sep_guarantor_phone").value = (gPhone && gPhone !== "null") ? gPhone : "";
-    
-    if (document.getElementById("sep_active_pledges"))  document.getElementById("sep_active_pledges").value = pledges ? pledges : 0;
-    if (document.getElementById("sep_customer_type"))   document.getElementById("sep_customer_type").value = type ? type : "regular";
-    if (document.getElementById("sep_customer_status")) document.getElementById("sep_customer_status").value = status ? status : "active";
-    if (document.getElementById("sep_notes"))           document.getElementById("sep_notes").value = (notes && notes !== "null") ? notes : "";
+    if (document.getElementById("sep_customer_name"))
+        document.getElementById("sep_customer_name").value = name || "";
+    if (document.getElementById("sep_gender"))
+        document.getElementById("sep_gender").value = gender ? gender : "";
+    if (document.getElementById("sep_dob"))
+        document.getElementById("sep_dob").value = dob ? dob : "";
+    if (document.getElementById("sep_phone_number"))
+        document.getElementById("sep_phone_number").value =
+            phone && phone !== "null" ? phone : "";
+    if (document.getElementById("sep_passport_id"))
+        document.getElementById("sep_passport_id").value =
+            passport && passport !== "null" ? passport : "";
+    if (document.getElementById("sep_email"))
+        document.getElementById("sep_email").value =
+            email && email !== "null" ? email : "";
+
+    if (document.getElementById("sep_address_house"))
+        document.getElementById("sep_address_house").value =
+            house && house !== "null" ? house : "";
+    if (document.getElementById("sep_address_street"))
+        document.getElementById("sep_address_street").value =
+            street && street !== "null" ? street : "";
+    if (document.getElementById("sep_address_village"))
+        document.getElementById("sep_address_village").value =
+            village && village !== "null" ? village : "";
+    if (document.getElementById("sep_address_district"))
+        document.getElementById("sep_address_district").value =
+            district && district !== "null" ? district : "";
+    if (document.getElementById("sep_address_province"))
+        document.getElementById("sep_address_province").value =
+            province && province !== "null" ? province : "";
+
+    if (document.getElementById("sep_guarantor_name"))
+        document.getElementById("sep_guarantor_name").value =
+            gName && gName !== "null" ? gName : "";
+    if (document.getElementById("sep_guarantor_phone"))
+        document.getElementById("sep_guarantor_phone").value =
+            gPhone && gPhone !== "null" ? gPhone : "";
+
+    if (document.getElementById("sep_active_pledges"))
+        document.getElementById("sep_active_pledges").value = pledges
+            ? pledges
+            : 0;
+    if (document.getElementById("sep_customer_type"))
+        document.getElementById("sep_customer_type").value = type
+            ? type
+            : "regular";
+    if (document.getElementById("sep_customer_status"))
+        document.getElementById("sep_customer_status").value = status
+            ? status
+            : "active";
+    if (document.getElementById("sep_notes"))
+        document.getElementById("sep_notes").value =
+            notes && notes !== "null" ? notes : "";
 
     // ៤. 🌟 បង្ខំបើកផ្ទាំង Pop-up ឈ្មោះ ID ថ្មី "my_hidden_edit_box" ដោយប្រើសិទ្ធិខ្ពស់ !important
     const targetModal = document.getElementById("my_hidden_edit_box");
     if (targetModal) {
-        targetModal.style.setProperty('display', 'flex', 'important');
+        targetModal.style.setProperty("display", "flex", "important");
     } else {
-        alert("រកមិនឃើញផ្ទាំង Pop-up ទាំងមូលដែលមាន id='my_hidden_edit_box' ឡើយ!");
+        alert(
+            "រកមិនឃើញផ្ទាំង Pop-up ទាំងមូលដែលមាន id='my_hidden_edit_box' ឡើយ!",
+        );
     }
 });
 
@@ -417,6 +455,76 @@ document.addEventListener("click", function (e) {
 function closeMyHiddenEditBox() {
     const targetModal = document.getElementById("my_hidden_edit_box");
     if (targetModal) {
-        targetModal.style.setProperty('display', 'none', 'important');
+        targetModal.style.setProperty("display", "none", "important");
     }
 }
+
+// ======================== Export Report (CSV) ===================
+document.addEventListener("DOMContentLoaded", function () {
+    const exportBtn = document.getElementById("exportBtn");
+    if (!exportBtn) return;
+
+    exportBtn.addEventListener("click", function () {
+        const headers = [
+            "ID",
+            "Name",
+            "Gender",
+            "Date of Birth",
+            "ID/Passport",
+            "Phone",
+            "Email",
+            "House",
+            "Street",
+            "Village",
+            "District",
+            "Province",
+            "Guarantor",
+            "Guarantor Phone",
+            "Type",
+            "Status",
+            "Items",
+        ];
+
+        // យកតែជួរដែលកំពុងបង្ហាញ (បន្ទាប់ពីស្វែងរក/ត្រង)
+        const rows = Array.from(
+            document.querySelectorAll("#customer-table-body tr[data-export]"),
+        ).filter((tr) => tr.style.display !== "none");
+
+        if (rows.length === 0) {
+            alert("មិនមានទិន្នន័យសម្រាប់ Export / No data to export");
+            return;
+        }
+
+        const esc = (v) => {
+            const s = v === null || v === undefined ? "" : String(v);
+            // ការពារ Excel formula injection
+            const safe = /^[=+\-@]/.test(s) ? "'" + s : s;
+            return '"' + safe.replace(/"/g, '""') + '"';
+        };
+
+        const lines = [headers.map(esc).join(",")];
+        rows.forEach((tr) => {
+            const data = JSON.parse(tr.getAttribute("data-export"));
+            lines.push(data.map(esc).join(","));
+        });
+
+        // \uFEFF = BOM ឱ្យ Excel អាន Khmer ត្រឹមត្រូវ
+        const blob = new Blob(["\uFEFF" + lines.join("\r\n")], {
+            type: "text/csv;charset=utf-8;",
+        });
+
+        const d = new Date();
+        const stamp =
+            d.getFullYear() +
+            String(d.getMonth() + 1).padStart(2, "0") +
+            String(d.getDate()).padStart(2, "0");
+
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "customers_" + stamp + ".csv";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(a.href);
+    });
+});

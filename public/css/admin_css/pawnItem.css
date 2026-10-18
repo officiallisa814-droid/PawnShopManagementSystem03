@@ -63,9 +63,12 @@
 .form-group input[type="text"],
 .form-group input[type="number"],
 .form-group input[type="date"],
-.form-group select,
+.form-group select {
+    width: 100%;
+}
 .form-group textarea {
-    width: calc(100% - 24px);
+    width: 100%;
+    box-sizing: border-box;
     padding: 10px 12px;
     border: 1px solid #cbd5e1;
     border-radius: 6px;
@@ -503,23 +506,60 @@
     background: #e2e8f0;
 }
 
-/* RESPONSIVE LAYOUT QUERIES */
-@media (max-width: 1024px) {
-    .pawn-form-grid {
-        grid-template-columns: repeat(2, 1fr);
+/* ================= RESPONSIVE LAYOUT QUERIES ===========================*/
+@media (max-width: 900px) {
+    .pawn-page-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
     }
-    .form-group.full-width {
-        grid-column: span 2;
+    .pawn-page-header .submit-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .inventory-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 12px 0;
+    }
+    .inventory-filters {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+    }
+    .inventory-filters select {
+        width: 100%;
+        padding: 7px 8px;
+        font-size: 13px;
+        height: 36px;
+        border-radius: 6px;
+    }
+    .search-wrapper {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+    .cool-search-input,
+    .cool-search-input:focus {
+        width: 100%;
+        font-size: 13px;
+        padding: 8px 36px 8px 12px;
+        height: 36px;
     }
 }
 
 @media (max-width: 640px) {
     .pawn-card {
-        padding: 16px;
+        padding: 12px;
     }
+    .pawn-container {
+        gap: 14px;
+    }
+
     .pawn-form-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 14px;
     }
     .form-group.full-width {
         grid-column: span 1;
@@ -527,15 +567,96 @@
     .form-group input[type="text"],
     .form-group input[type="number"],
     .form-group input[type="date"],
+    .form-group select,
     .form-group textarea {
-        width: calc(100% - 24px);
+        width: 100%;
+        font-size: 16px;
+        padding: 11px 12px;
     }
 
-    .form-actions {
-        justify-content: stretch;
+    /* Modal */
+    .pawn-modal-card {
+        max-width: 100%;
+        max-height: 96vh;
+        border-radius: 10px;
+        margin: 0 8px;
     }
-    .submit-btn {
-        width: 100%;
-        text-align: center;
+    .pawn-modal-header {
+        padding: 12px 16px;
+    }
+    .pawn-modal-header h3 {
+        font-size: 0.95rem;
+    }
+    .pawn-modal-body {
+        padding: 14px;
+    }
+    .pawn-modal-actions {
+        padding: 10px 14px;
+    }
+    .pawn-modal-actions .btn-cancel,
+    .pawn-modal-actions .submit-btn {
+        flex: 1;
+        padding: 11px 12px;
+    }
+
+    /* តារាង: លាក់ជួរតិចសំខាន់ (Photo, Category, IMEI, Storage) */
+    .inventory-header {
+        gap: 8px;
+        padding: 8px 0;
+    }
+    .pawn-card-title {
+        font-size: 15px;
+    }
+    .inventory-filters {
+        gap: 6px;
+    }
+
+    .inventory-filters select,
+    .cool-search-input {
+        font-size: 16px;
+        height: 36px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    .inventory-table {
+        min-width: 0;
+    }
+    .inventory-table th:nth-child(2),
+    .inventory-table td:nth-child(2),
+    .inventory-table th:nth-child(5),
+    .inventory-table td:nth-child(5),
+    .inventory-table th:nth-child(6),
+    .inventory-table td:nth-child(6),
+    .inventory-table th:nth-child(7),
+    .inventory-table td:nth-child(7) {
+        display: none;
+    }
+
+    .inventory-table th {
+        padding: 10px 8px;
+        font-size: 11px;
+    }
+    .inventory-table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+
+    .row-btn {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+    }
+    .row-btn-contract {
+        margin-top: 4px;
+    }
+}
+.sub-storage {
+    display: none;
+}
+@media (max-width: 640px) {
+    .sub-storage {
+        display: block;
+        font-size: 11px;
+        color: #94a3b8;
+        font-weight: 400;
     }
 }

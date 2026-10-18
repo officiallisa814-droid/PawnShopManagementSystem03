@@ -76,6 +76,8 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->back()->with('success', 'បានកត់ត្រាការបង់ប្រាក់រួចរាល់!');
     })->name('paymentSchedule.pay');
 
+    Route::delete('/pawn-items/{item}/main-photo', [PawnItemController::class, 'destroyMainPhoto'])
+    ->name('pawnItems.mainPhoto.destroy');
 
     // ----- Loan Contract -----
     Route::get('/loanContract', [LoanContractController::class, 'index'])->name('loanContract');

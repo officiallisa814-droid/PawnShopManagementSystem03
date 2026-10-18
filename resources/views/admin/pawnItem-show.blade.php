@@ -6,6 +6,8 @@
 
 @section('content')
     @php
+        use Illuminate\Support\Facades\Storage;
+
         $status = strtolower($item->item_status ?? 'active');
         $labels = [
             'active' => ['In Storage', '#def7ec', '#03543f'],
@@ -16,7 +18,11 @@
         if ($status === 'active' && $hasOpen) {
             [$label, $bg, $fg] = ['Pledged', '#dbeafe', '#1e40af'];
         }
-        $mainPhoto = $item->item_photo ?: optional($item->photos->first())->path;
+
+        // រូបមុខ: ជ្រើសរូបដំបូងដែលមានឯកសារពិត
+        $mainExists = $item->item_photo && Storage::disk('public')->exists($item->item_photo);
+        $candidates = array_merge([$item->item_photo], $item->photos->pluck('path')->all());
+        $mainPhoto = collect($candidates)->first(fn($p) => $p && Storage::disk('public')->exists($p));
     @endphp
 
     <div class="pawn-container-wrapper">
@@ -56,6 +62,7 @@
             {{-- ================= LEFT ================= --}}
             <div>
                 <div class="pd-card">
+                    {{-- រូបធំ --}}
                     @if ($mainPhoto)
                         <img id="mainPhoto" class="pd-main-photo" src="{{ asset('storage/' . $mainPhoto) }}" alt="Item">
                     @else
@@ -65,26 +72,44 @@
                         </div>
                     @endif
 
+                    {{-- thumbnails --}}
                     @if ($item->photos->count() || $item->item_photo)
                         <div class="pd-thumbs">
+                            {{-- រូបមុខ (លុបបាន ទោះឯកសារបាត់ក៏ដោយ) --}}
                             @if ($item->item_photo)
                                 <div class="thumb-wrap">
-                                    <img src="{{ asset('storage/' . $item->item_photo) }}" alt=""
-                                        onclick="document.getElementById('mainPhoto').src=this.src">
-                                </div>
-                            @endif
-
-                            @foreach ($item->photos as $p)
-                                <div class="thumb-wrap">
-                                    <img src="{{ asset('storage/' . $p->path) }}" alt=""
-                                        onclick="document.getElementById('mainPhoto').src=this.src">
-                                    <form action="{{ route('pawnItems.photo.destroy', $p->id) }}" method="POST"
-                                        onsubmit="return confirm('លុបរូបនេះ?')">
+                                    @if ($mainExists)
+                                        <img src="{{ asset('storage/' . $item->item_photo) }}" alt=""
+                                            onclick="document.getElementById('mainPhoto') && (document.getElementById('mainPhoto').src=this.src)">
+                                    @else
+                                        <div
+                                            style="width:60px;height:60px;border-radius:8px;border:2px dashed #fca5a5;display:flex;align-items:center;justify-content:center;color:#dc2626;font-size:10px;text-align:center;">
+                                            រូបបាត់
+                                        </div>
+                                    @endif
+                                    <form action="{{ route('pawnItems.mainPhoto.destroy', $item->id) }}" method="POST"
+                                        onsubmit="return confirm('លុបរូបមុខនេះ?')">
                                         @csrf
                                         @method('DELETE')
                                         <button class="thumb-del" type="submit">×</button>
                                     </form>
                                 </div>
+                            @endif
+
+                            {{-- រូបបន្ថែម --}}
+                            @foreach ($item->photos as $p)
+                                @if (Storage::disk('public')->exists($p->path))
+                                    <div class="thumb-wrap">
+                                        <img src="{{ asset('storage/' . $p->path) }}" alt=""
+                                            onclick="document.getElementById('mainPhoto') && (document.getElementById('mainPhoto').src=this.src)">
+                                        <form action="{{ route('pawnItems.photo.destroy', $p->id) }}" method="POST"
+                                            onsubmit="return confirm('លុបរូបនេះ?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="thumb-del" type="submit">×</button>
+                                        </form>
+                                    </div>
+                                @endif
                             @endforeach
                         </div>
                     @endif
@@ -123,7 +148,8 @@
                     <div class="pd-row"><span>Accessories</span><span>{{ $item->included_accessories ?: '—' }}</span></div>
                     <div class="pd-row"><span>Storage</span><span>{{ $item->storage_location }}</span></div>
                     <div class="pd-row">
-                        <span>Received</span><span>{{ optional($item->created_at)->format('d/m/Y H:i') }}</span></div>
+                        <span>Received</span><span>{{ optional($item->created_at)->format('d/m/Y H:i') }}</span>
+                    </div>
                 </div>
 
                 <div class="pd-card">
@@ -215,6 +241,9 @@
                 <label>Condition & wear details</label>
                 <textarea name="condition_details"
                     rows="3">{{ old('condition_details', $item->item_condition_details) }}</textarea>
+
+                <label>Main photo (ជំនួសរូបមុខ / Replace main photo)</label>
+                <input type="file" name="item_photo" accept="image/*">
 
                 <label>Add photos (ជ្រើសបានច្រើន)</label>
                 <input type="file" name="photos[]" multiple accept="image/*">
