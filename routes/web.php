@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuctionController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PawnItemController;
@@ -56,13 +57,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pawnItem/{id}', [PawnItemController::class, 'show'])->whereNumber('id')->name('pawnItem.show');
     Route::post('/pawn-items', [PawnItemController::class, 'store'])->name('pawnItems.store');
     Route::put('/pawn-items/{item}', [PawnItemController::class, 'update'])->name('pawnItems.update');
+    Route::delete('/pawn-items/{item}/main-photo', [PawnItemController::class, 'destroyMainPhoto'])->name('pawnItems.mainPhoto.destroy');
     Route::delete('/pawn-item-photos/{photo}', [PawnItemController::class, 'destroyPhoto'])->name('pawnItems.photo.destroy');
 
-    // ទំនិញរបស់អតិថិជន (ប្រើក្នុង modal Loan Contract)
     Route::get('/api/customers/{customer}/pawn-items', [PawnItemController::class, 'byCustomer'])
         ->name('customers.pawnItems');
 
-    // រកម្ចាស់ទំនិញ (ពីប៊ូតុង Contract)
     Route::get('/api/pawn-item-owner/{item}', function ($item) {
         return response()->json(['customer_id' => PawnItem::findOrFail($item)->customer_id]);
     });
@@ -75,9 +75,6 @@ Route::middleware(['auth'])->group(function () {
         ]);
         return redirect()->back()->with('success', 'បានកត់ត្រាការបង់ប្រាក់រួចរាល់!');
     })->name('paymentSchedule.pay');
-
-    Route::delete('/pawn-items/{item}/main-photo', [PawnItemController::class, 'destroyMainPhoto'])
-    ->name('pawnItems.mainPhoto.destroy');
 
     // ----- Loan Contract -----
     Route::get('/loanContract', [LoanContractController::class, 'index'])->name('loanContract');
@@ -101,11 +98,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/payments/data', [PaymentController::class, 'data'])->name('payments.data');
     Route::post('/payments/{id}/pay', [PaymentController::class, 'pay'])->name('payments.pay');
 
-    // ----- Other menus -----
-    Route::get('/auction-sales', function () {
-        return view('admin.auction-sales');
-    })->name('auction-sales');
+    // ----- Auction & Sales -----
+    Route::get('/auction-sales', [AuctionController::class, 'index'])->name('auction-sales');
+    Route::get('/auction-sales/data', [AuctionController::class, 'data'])->name('auction-sales.data');
+    Route::post('/auction-sales/schedule', [AuctionController::class, 'schedule'])->name('auction-sales.schedule');
+    Route::post('/auction-sales/{auction}/result', [AuctionController::class, 'result'])->name('auction-sales.result');
+    Route::post('/auction-sales/{auction}/cancel', [AuctionController::class, 'cancel'])->name('auction-sales.cancel');
 
+    // ----- Other menus -----
     Route::get('/reports', function () {
         return view('admin.reports');
     })->name('reports');
