@@ -6,11 +6,12 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PawnItemController;
 use App\Http\Controllers\LoanContractController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Models\Customer;
 use App\Models\PawnItem;
-use App\Models\PaymentSchedule;
 
 // ==========================================================
 // 🔓 PUBLIC ROUTES
@@ -42,15 +43,28 @@ Route::middleware(['auth'])->group(function () {
         return view('admin.customer', compact('customers'));
     })->name('customer');
 
+    // blacklist ត្រូវនៅមុន /customer/{id}
+    Route::get('/customer/blacklist', [CustomerController::class, 'blacklist'])->name('customer.blacklist');
+
+    Route::get('/customer/{id}', function ($id) {
+        $customer = Customer::findOrFail($id);
+        return view('admin.customer-show', compact('customer'));
+    })->whereNumber('id')->name('customer.show');
+
     Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
     Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
     Route::delete('/customers/{customer}', [CustomerController::class, 'destroy'])->name('customers.destroy');
     Route::get('/api/search-customers', [CustomerController::class, 'searchApi'])->name('customers.searchApi');
 
-    Route::get('/customer/{id}', function ($id) {
-        $customer = Customer::findOrFail($id);
-        return view('admin.customer-show', compact('customer'));
-    })->name('customer.show');
+    // ----- Reports -----
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports');
+    Route::get('/reports/data', [ReportController::class, 'data'])->name('reports.data');
+
+    //setting
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+    Route::post('/settings/{group}', [SettingController::class, 'save'])->name('settings.save');
+    Route::get('/settings/backup/download', [SettingController::class, 'backup'])->name('settings.backup');
+    Route::post('/settings/backup/restore', [SettingController::class, 'restore'])->name('settings.restore');
 
     // ----- Pawn Items -----
     Route::get('/pawnItem', [PawnItemController::class, 'index'])->name('pawnItem');
@@ -66,15 +80,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/api/pawn-item-owner/{item}', function ($item) {
         return response()->json(['customer_id' => PawnItem::findOrFail($item)->customer_id]);
     });
-
-    Route::post('/payment-schedule/{id}/pay', function ($id) {
-        $schedule = PaymentSchedule::findOrFail($id);
-        $schedule->update([
-            'status' => 'paid',
-            'paid_date' => now()->format('Y-m-d'),
-        ]);
-        return redirect()->back()->with('success', 'បានកត់ត្រាការបង់ប្រាក់រួចរាល់!');
-    })->name('paymentSchedule.pay');
 
     // ----- Loan Contract -----
     Route::get('/loanContract', [LoanContractController::class, 'index'])->name('loanContract');
@@ -105,14 +110,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/auction-sales/{auction}/result', [AuctionController::class, 'result'])->name('auction-sales.result');
     Route::post('/auction-sales/{auction}/cancel', [AuctionController::class, 'cancel'])->name('auction-sales.cancel');
 
-    // ----- Other menus -----
-    Route::get('/reports', function () {
-        return view('admin.reports');
-    })->name('reports');
-
-    Route::get('/settings', function () {
-        return view('admin.settings');
-    })->name('settings');
+    // ----- Settings -----
+    // Route::get('/settings', function () {
+    //     return view('admin.settings');
+    // })->name('settings');
 
     // ----- Customer portal -----
     Route::get('/my-pledges', function () {

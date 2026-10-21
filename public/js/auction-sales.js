@@ -281,3 +281,22 @@
 
     load();
 })();
+
+document.addEventListener("DOMContentLoaded", function () {
+    const btn = document.getElementById("blacklistBtn");
+    const modal = document.getElementById("blacklistModal");
+    const close = document.getElementById("blacklistClose");
+    if (!btn || !modal) return;
+
+    const open = () => modal.classList.add("show");
+    const hide = () => modal.classList.remove("show");
+
+    btn.addEventListener("click", open);
+    close.addEventListener("click", hide);
+    modal.addEventListener("mousedown", (e) => {
+        if (e.target === modal) hide();
+    });
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") hide();
+    });
+});

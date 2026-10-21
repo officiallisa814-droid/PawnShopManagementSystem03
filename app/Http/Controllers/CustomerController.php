@@ -165,4 +165,13 @@ class CustomerController extends Controller
 
         return view('admin.customerShow', compact('customer')); // ប្តូរឈ្មោះ view តាម file ពិតរបស់អ្នក
     }
+    public function blacklist()
+{
+    $customers = Customer::with('pawnItems')
+        ->where('customer_type', 'bad')
+        ->latest()
+        ->get();
+
+    return view('admin.customer-blacklist', compact('customers'));
+}
 }

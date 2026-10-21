@@ -992,6 +992,94 @@ input[type="checkbox"] {
     margin-bottom: 14px;
 }
 
+.bl-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.bl-overlay.show {
+    display: flex;
+}
+.bl-box {
+    background: #fff;
+    width: 100%;
+    max-width: 900px;
+    max-height: 88vh;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.bl-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    background: #7f1d1d;
+    color: #fff;
+}
+.bl-head h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.bl-x {
+    background: none;
+    border: none;
+    color: #fecaca;
+    font-size: 26px;
+    cursor: pointer;
+    line-height: 1;
+}
+.bl-body {
+    padding: 16px;
+    overflow-y: auto;
+}
+.bl-scroll {
+    overflow-x: auto;
+}
+.bl-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 600px;
+}
+.bl-table th {
+    background: #fef2f2;
+    color: #7f1d1d;
+    text-align: left;
+    padding: 10px 12px;
+}
+.bl-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+}
+.bl-table tbody tr:hover {
+    background: #fef2f2;
+}
+.bl-empty {
+    text-align: center;
+    color: #94a3b8;
+    padding: 24px !important;
+}
+
+@media (max-width: 600px) {
+    .bl-box {
+        max-height: 94vh;
+    }
+    .bl-table th,
+    .bl-table td {
+        padding: 8px;
+        font-size: 13px;
+    }
+}
 /* ===================== Responsive ===================== */
 @media (max-width: 900px) {
     .directory-header {

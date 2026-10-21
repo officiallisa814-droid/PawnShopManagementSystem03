@@ -1,0 +1,244 @@
+#rp-app {
+    --navy: #0f2a5a;
+    --brass: #b8862b;
+    --line: #d9dde5;
+    padding: 8px 4px 40px;
+    color: #1c2433;
+}
+#rp-app * {
+    box-sizing: border-box;
+}
+.rp-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+.rp-head h1 {
+    margin: 0;
+    font-size: 1.9rem;
+    color: var(--navy);
+}
+.rp-head h1 small {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #6b7385;
+    margin-left: 8px;
+}
+.rp-export {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.btn {
+    background: var(--navy);
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font: inherit;
+}
+.btn.ghost {
+    background: #fff;
+    color: var(--navy);
+    border: 1px solid var(--line);
+}
+.btn:hover {
+    opacity: 0.9;
+}
+
+.rp-filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 14px;
+    margin-bottom: 16px;
+}
+.f {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.85rem;
+}
+.f label {
+    color: #6b7385;
+    font-weight: 600;
+}
+.f input,
+.f select {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font: inherit;
+    min-width: 170px;
+    background: #fff;
+}
+
+.rp-sheet {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 20px;
+}
+.rp-title h2 {
+    margin: 0;
+    color: var(--navy);
+}
+.rp-title p {
+    margin: 4px 0 14px;
+    color: #6b7385;
+    font-size: 0.85rem;
+}
+.rp-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+}
+.stat {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--brass);
+    border-radius: 6px;
+    padding: 10px 12px;
+    background: #fbfbfd;
+}
+.stat b {
+    display: block;
+    font-size: 1.15rem;
+    color: var(--navy);
+}
+.stat span {
+    font-size: 0.8rem;
+    color: #6b7385;
+}
+.rp-note {
+    background: #fff8e6;
+    border: 1px solid #ead9aa;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    color: #7a5a10;
+}
+
+.rp-table-wrap {
+    overflow-x: auto;
+}
+.rp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+.rp-table th {
+    background: var(--navy);
+    color: #fff;
+    text-align: left;
+    padding: 9px 10px;
+    white-space: nowrap;
+}
+.rp-table td {
+    padding: 8px 10px;
+    border-top: 1px solid var(--line);
+    white-space: nowrap;
+}
+.rp-table tbody tr:nth-child(even) td {
+    background: #f8f9fc;
+}
+.empty {
+    text-align: center;
+    color: #6b7385;
+    padding: 26px !important;
+}
+
+.rp-toast {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    background: var(--navy);
+    color: #fff;
+    padding: 11px 18px;
+    border-radius: 6px;
+    z-index: 3000;
+}
+.rp-toast[hidden] {
+    display: none;
+}
+
+/* ===== PRINT / PDF ===== */
+@media print {
+    .sidebar,
+    .top-header,
+    .rp-head,
+    .rp-filters,
+    .rp-toast {
+        display: none !important;
+    }
+    body,
+    .main-wrapper,
+    .content-body,
+    .dashboard-container {
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+    .rp-sheet {
+        border: 0;
+        padding: 0;
+    }
+    .rp-table {
+        font-size: 11px;
+    }
+    .rp-table th {
+        background: #eee !important;
+        color: #000 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    .rp-table td,
+    .rp-table th {
+        white-space: normal;
+        border: 1px solid #999;
+        padding: 4px 6px;
+    }
+    .rp-table-wrap {
+        overflow: visible;
+    }
+    .stat {
+        break-inside: avoid;
+    }
+    @page {
+        size: A4 landscape;
+        margin: 10mm;
+    }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 640px) {
+    .rp-head h1 {
+        font-size: 1.4rem;
+    }
+    .f {
+        width: 100%;
+    }
+    .f input,
+    .f select {
+        width: 100%;
+        font-size: 16px;
+    }
+    .rp-filters .btn {
+        width: 100%;
+    }
+    .rp-sheet {
+        padding: 12px;
+    }
+    .rp-summary {
+        grid-template-columns: 1fr 1fr;
+    }
+}

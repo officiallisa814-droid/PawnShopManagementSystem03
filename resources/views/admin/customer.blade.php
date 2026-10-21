@@ -15,7 +15,9 @@
             <h2 class="directory-title">Customer Directory</h2>
             <div class="action-buttons">
                 <button type="button" class="btn btn-add"><i class="fa-solid fa-plus"></i> Add New Customer</button>
-                <button class="btn btn-view"><i class="fa-solid fa-user-slash"></i> View Blacklist</button>
+                <a href="{{ route('customer.blacklist') }}" class="btn btn-view" style="text-decoration:none;">
+                    <i class="fa-solid fa-user-slash"></i> View Blacklist
+                </a>
                 <button type="button" class="btn btn-export" id="exportBtn"><i class="fa-solid fa-download"></i> Export
                     Report (.csv)</button>
             </div>
@@ -143,7 +145,7 @@
                                     @endif
                                 </td>
                                 <!-- <td class="action-cell" onclick="event.stopPropagation();"><i class="fa-solid fa-ellipsis"></i>
-                                                                                                                                </td> -->
+                                                                                                                                                        </td> -->
                                 <!-- ======== Prarents icon (...)========= -->
                                 <td class="action-cell" onclick="event.stopPropagation();">
                                     <!-- ប៊ូតុងមេ Ellipsis (...) នឹងប្តូរមកជាជួរប៊ូតុងបញ្ជាទន្ទឹមគ្នាភ្លាមៗពេល Hover -->
@@ -570,11 +572,56 @@
             </div>
         </div>
 
-
-
-
     </div>
+    <!-- ===================== View Backlist =========================== -->
 
+    @php $blacklist = $customers->where('customer_type', 'bad'); @endphp
+
+    <div class="bl-overlay" id="blacklistModal">
+        <div class="bl-box">
+            <div class="bl-head">
+                <h3><i class="fa-solid fa-user-slash"></i>
+                    <span class="khmer-os">បញ្ជីអតិថិជនប្រវត្តិមិនល្អ</span> / Blacklist ({{ $blacklist->count() }})
+                </h3>
+                <button type="button" class="bl-x" id="blacklistClose">&times;</button>
+            </div>
+            <div class="bl-body">
+                <div class="bl-scroll">
+                    <table class="bl-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>ID/Passport</th>
+                                <th>Phone</th>
+                                <th>Province</th>
+                                <th>Status</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($blacklist as $b)
+                                <tr onclick="window.location='{{ route('customer.show', $b->id) }}'" style="cursor:pointer;">
+                                    <td>{{ $b->id }}</td>
+                                    <td><b style="color:#b91c1c;">{{ $b->customer_name }}</b></td>
+                                    <td>{{ $b->passport_id ?? '-' }}</td>
+                                    <td>{{ $b->phone_number }}</td>
+                                    <td>{{ $b->address_province ?? '-' }}</td>
+                                    <td>{{ ucfirst($b->customer_status) }}</td>
+                                    <td>{{ \Illuminate\Support\Str::limit($b->notes, 40) ?: '-' }}</td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="bl-empty">មិនមានអតិថិជនប្រវត្តិមិនល្អទេ / No blacklisted customers.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 @endsection
 @push('scripts')
