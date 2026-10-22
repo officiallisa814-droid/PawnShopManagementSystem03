@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+use Illuminate\Support\Facades\View;
+use App\Models\Setting;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -19,6 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            try {
+                $view->with('shop', Setting::all_());
+            } catch (\Throwable $e) {
+                $view->with('shop', Setting::DEFAULTS);
+            }
+        });
     }
 }
