@@ -17,6 +17,7 @@ class LoanContractController extends Controller
             'pawnItem' => $request->filled('pawn_item')
                 ? \App\Models\PawnItem::with('customer')->find($request->query('pawn_item'))
                 : null,
+            'defaults' => \App\Models\Setting::all_(),
         ]);
     }
 
@@ -98,9 +99,12 @@ class LoanContractController extends Controller
         if (empty($d['item_name'])) {
             throw ValidationException::withMessages(['item_name' => 'Item name is required.']);
         }
-        if (!empty($d['item_value']) && $d['loan_amount'] > $d['item_value']) {
+        $maxPct = (float) \App\Models\Setting::all_()['max_loan_percent'];
+        $value = (float) ($d['item_value'] ?? 0);
+        if ($value > 0 && $d['loan_amount'] > $value * $maxPct / 100) {
             throw ValidationException::withMessages([
-                'loan_amount' => 'Loan amount cannot exceed the item value.',
+                'loan_amount' => "Loan cannot exceed {$maxPct}% of item value (max "
+                    . pawn_money($value * $maxPct / 100) . ').',
             ]);
         }
 
@@ -170,6 +174,7 @@ class LoanContractController extends Controller
             $contract->transactions()->create([
                 'type' => 'renew',
                 'amount' => $interest,
+                'tax_amount' => pawn_tax($interest),
                 'date' => today(),
                 'note' => "Interest paid, renewed for {$months} month(s)",
             ]);
@@ -201,7 +206,7 @@ class LoanContractController extends Controller
                 ->where('status', '!=', 'paid')
                 ->get()
                 ->each(fn($s) => DB::table('payment_schedules')->where('id', $s->id)->update([
-                    'due_date' => \Carbon\Carbon::parse($s->due_date)->addDays((int) $d['days'])->toDateString(),
+                    'due_date' => \Carbon\Carbon::parse($s->due_date)->addMonthsNoOverflow($months)->toDateString(),
                 ]));
 
             $contract->transactions()->create([
@@ -253,6 +258,7 @@ class LoanContractController extends Controller
             $contract->transactions()->create([
                 'type' => 'auction',
                 'amount' => $d['sale_amount'] ?? 0,
+                'tax_amount' => pawn_tax((float) ($d['sale_amount'] ?? 0)),
                 'date' => today(),
                 'note' => 'Item auctioned',
             ]);
@@ -324,5 +330,5 @@ class LoanContractController extends Controller
         return view('admin.loanContractShow', compact('contract', 'monthly', 'schedule'));
     }
 
-    
+
 }

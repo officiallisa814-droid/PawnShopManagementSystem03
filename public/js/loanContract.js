@@ -1,18 +1,34 @@
 (() => {
     const root = document.getElementById("lc-app");
     if (!root) return;
-    const csrf = root.dataset.csrf,
-        base = root.dataset.base;
-    let customers = JSON.parse(root.dataset.customers || "[]");
+
+    /* ---------- Config ពី Settings (អានពី data-* លើ #lc-app) ---------- */
+    const D = root.dataset;
+    const csrf =
+        D.csrf ||
+        document.querySelector('meta[name="csrf-token"]')?.content ||
+        "";
+    const base = D.base || "/loan-contracts";
+    const showUrl = D.show || "/loanContract"; // ទំព័រកាលវិភាគបង់ប្រាក់ប្រចាំខែ
+    const DEF_RATE = parseFloat(D.rate) || 3;
+    const DEF_TERM = parseInt(D.term) || 1;
+    const MAX_PCT = parseFloat(D.maxLoan) || 100;
+    const SYMBOL = D.symbol || "$";
+    const TAX_ON = D.taxOn === "1";
+    const TAX_NAME = D.taxName || "VAT";
+    const TAX_RATE = parseFloat(D.taxRate) || 0;
+    let customers = JSON.parse(D.customers || "[]");
     let contracts = [];
 
     const $ = (s, p = document) => p.querySelector(s);
     const money = (n) =>
-        "$" +
+        SYMBOL +
         Number(n || 0).toLocaleString("en-US", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         });
+    const taxOf = (amount) =>
+        TAX_ON ? Math.round(amount * TAX_RATE) / 100 : 0;
     const fmtDate = (d) => {
         const x = new Date(d);
         return (
@@ -115,7 +131,7 @@
                 if (c.status === "expired")
                     opts += '<option value="auction">Auction item</option>';
                 opts += '<option value="print">Print Pawn Agreement</option>';
-                return `<tr>
+                return `<tr class="lc-row" data-id="${c.id}" tabindex="0" title="ចុចដើម្បីមើលកាលវិភាគបង់ប្រាក់">
         <td><strong>${esc(c.contract_no)}</strong></td>
         <td>${esc(c.customer?.customer_name)}<br><small>${esc(c.customer?.phone_number)}</small></td>
         <td>${esc(c.item_name)}</td>
@@ -126,7 +142,7 @@
         <td class="num">${c.is_open ? money(c.accrued_interest) : "—"}</td>
         <td class="num">${c.is_open ? money(c.total_due) : "—"}</td>
         <td><span class="badge ${c.status}">${LABEL[c.status]}</span></td>
-        <td><select class="lc-select row-act" data-id="${c.id}">${opts}</select></td></tr>`;
+        <td class="act-cell"><select class="lc-select row-act" data-id="${c.id}">${opts}</select></td></tr>`;
             })
             .join("");
     }
@@ -168,7 +184,7 @@
                     if (el)
                         el.insertAdjacentHTML(
                             "afterend",
-                            `<span class="err">${esc(v[0])}</span>`,
+                            `<span class="err" style="display:block;color:#b91c1c;font-size:12px;margin-top:4px;">${esc(v[0])}</span>`,
                         );
                 });
             toast(e.message, true);
@@ -178,6 +194,56 @@
     };
 
     const val = (n) => $(`#lc-modal-body [name="${n}"]`)?.value;
+
+    /* ---------- Inline form errors ---------- */
+    const ERR_STYLE =
+        "display:block;color:#b91c1c;font-size:12px;margin-top:4px;";
+
+    function clearFieldError(key) {
+        const body = $("#lc-modal-body");
+        body.querySelectorAll(`.err[data-for="${key}"]`).forEach((n) =>
+            n.remove(),
+        );
+        body.querySelectorAll(`[data-invalid="${key}"]`).forEach((n) => {
+            n.style.borderColor = "";
+            n.removeAttribute("data-invalid");
+        });
+        if (!body.querySelector(".err")) $("#lc-form-err")?.remove();
+    }
+
+    function showFormErrors(list) {
+        const body = $("#lc-modal-body");
+        body.querySelectorAll(".err, #lc-form-err").forEach((n) => n.remove());
+        body.querySelectorAll("[data-invalid]").forEach((n) => {
+            n.style.borderColor = "";
+            n.removeAttribute("data-invalid");
+        });
+
+        list.forEach(({ key, target, msg, mark }) => {
+            target.insertAdjacentHTML(
+                "afterend",
+                `<span class="err" data-for="${key}" style="${ERR_STYLE}">${esc(msg)}</span>`,
+            );
+            if (mark) {
+                mark.style.borderColor = "#dc2626";
+                mark.setAttribute("data-invalid", key);
+            }
+        });
+
+        body.insertAdjacentHTML(
+            "afterbegin",
+            `<div id="lc-form-err" role="alert" style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:8px;padding:10px 12px;margin-bottom:12px;font-size:13.5px;">
+        ⚠ សូមបំពេញព័ត៌មានឱ្យបានត្រឹមត្រូវ (មាន ${list.length} កន្លែងមានបញ្ហា)
+      </div>`,
+        );
+
+        const first = list[0];
+        (first.mark || first.target).scrollIntoView({
+            block: "center",
+            behavior: "smooth",
+        });
+        first.mark?.focus?.();
+    }
 
     /* ---------- Create Pawn Contract ---------- */
     function openCreate(preCustomerId, prePawnItemId) {
@@ -206,23 +272,93 @@
 
       <div class="grid2" style="margin-top:15px;">
         <div class="f"><label>Item name</label><input id="item_name_ro" readonly style="background:#f1f5f9;"></div>
-        <div class="f"><label>Appraised value ($)</label><input name="item_value" id="item_value_ro" readonly style="background:#f1f5f9;"></div>
+        <div class="f"><label>Appraised value (${esc(SYMBOL)})</label><input name="item_value" id="item_value_ro" readonly style="background:#f1f5f9;"></div>
       </div>
 
       <div class="grid2">
-        <div class="f"><label>Loan amount ($)</label><input name="loan_amount" type="number" step="0.01" min="1"></div>
-        <div class="f"><label>Interest rate (% per month)</label><input name="interest_rate" type="number" step="0.01" min="0" value="3"></div>
-        <div class="f"><label>Term (months)</label><input name="term_months" type="number" min="1" value="1"></div>
+        <div class="f"><label>Loan amount (${esc(SYMBOL)})</label><input name="loan_amount" type="number" step="0.01" min="1"><small id="max_hint" style="color:#64748b;"></small></div>
+        <div class="f"><label>Interest rate (% per month)</label><input name="interest_rate" type="number" step="0.01" min="0" value="${DEF_RATE}"></div>
+        <div class="f"><label>Term (months)</label><input name="term_months" type="number" min="1" value="${DEF_TERM}"></div>
         <div class="f"><label>Loan date</label><input name="loan_date" type="date" value="${today}"></div>
       </div>
       <div class="f"><label>Note</label><textarea name="item_description" rows="2"></textarea></div>
       <div class="calc" id="calc"></div>`,
             "Save contract",
             async () => {
+                const errs = [];
+                const add = (key, target, msg, mark = target) =>
+                    errs.push({ key, target, msg, mark });
+                const fld = (name) => $(`#lc-modal-body [name="${name}"]`);
+                const srcEl = $("#cust_search_input");
+
+                // អតិថិជន
                 if (!val("customer_id"))
-                    throw new Error("Please select a customer.");
+                    add(
+                        "customer",
+                        srcEl.parentElement,
+                        srcEl.value.trim()
+                            ? "សូមជ្រើសអតិថិជនពីបញ្ជីដែលបង្ហាញ។"
+                            : "សូមជ្រើសរើសអតិថិជន។",
+                        srcEl,
+                    );
+
+                // ទំនិញបញ្ចាំ
                 if (!val("pawn_item_id"))
-                    throw new Error("Please select a pawn item.");
+                    add(
+                        "item",
+                        $("#items-list"),
+                        val("customer_id")
+                            ? "សូមជ្រើសរើសទំនិញបញ្ចាំមួយ។"
+                            : "សូមជ្រើសអតិថិជនជាមុន រួចជ្រើសទំនិញ។",
+                        null,
+                    );
+
+                // ប្រាក់កម្ចី
+                const loan = parseFloat(val("loan_amount"));
+                const value = parseFloat(val("item_value")) || 0;
+                if (isNaN(loan) || loan <= 0)
+                    add(
+                        "loan_amount",
+                        fld("loan_amount"),
+                        "សូមបញ្ចូលចំនួនប្រាក់កម្ចី (ត្រូវធំជាង 0)។",
+                    );
+                else if (value > 0 && loan > (value * MAX_PCT) / 100)
+                    add(
+                        "loan_amount",
+                        fld("loan_amount"),
+                        `ប្រាក់កម្ចីលើសកម្រិត ${MAX_PCT}% នៃតម្លៃទំនិញ (អតិបរមា ${money((value * MAX_PCT) / 100)})។`,
+                    );
+
+                // អត្រាការប្រាក់
+                const rate = parseFloat(val("interest_rate"));
+                if (isNaN(rate) || rate < 0 || rate > 100)
+                    add(
+                        "interest_rate",
+                        fld("interest_rate"),
+                        "អត្រាការប្រាក់ត្រូវនៅចន្លោះ 0 ដល់ 100។",
+                    );
+
+                // រយៈពេល
+                const term = parseInt(val("term_months"), 10);
+                if (!term || term < 1 || term > 60)
+                    add(
+                        "term_months",
+                        fld("term_months"),
+                        "រយៈពេលត្រូវនៅចន្លោះ 1 ដល់ 60 ខែ។",
+                    );
+
+                // ថ្ងៃចាប់ផ្តើម
+                if (!val("loan_date"))
+                    add(
+                        "loan_date",
+                        fld("loan_date"),
+                        "សូមជ្រើសរើសថ្ងៃចាប់ផ្តើមកិច្ចសន្យា។",
+                    );
+
+                if (errs.length) {
+                    showFormErrors(errs);
+                    return; // ទុក Modal ឱ្យបើកដដែល
+                }
 
                 const body = {
                     customer_id: val("customer_id"),
@@ -245,12 +381,22 @@
                 r = +val("interest_rate") || 0,
                 m = +val("term_months") || 1;
             const interest = ((p * r) / 100) * m,
+                tax = taxOf(interest),
                 d = new Date(val("loan_date") || Date.now());
             d.setMonth(d.getMonth() + m);
+
+            const value = +val("item_value") || 0;
+            const hint = $("#max_hint");
+            if (hint)
+                hint.textContent = value
+                    ? `Max ${MAX_PCT}% = ${money((value * MAX_PCT) / 100)}`
+                    : `Max ${MAX_PCT}% នៃតម្លៃទំនិញ`;
+
             $("#calc").innerHTML = `
         <div><span>Interest for ${m} month(s)</span><span>${money(interest)}</span></div>
+        ${TAX_ON ? `<div><span>${esc(TAX_NAME)} (${TAX_RATE}%) on interest</span><span>${money(tax)}</span></div>` : ""}
         <div><span>Due date</span><span>${fmtDate(d)}</span></div>
-        <div class="total"><span>Customer pays at due date</span><span>${money(p + interest)}</span></div>`;
+        <div class="total"><span>Customer pays at due date</span><span>${money(p + interest + tax)}</span></div>`;
         };
 
         const srcInput = $("#cust_search_input");
@@ -258,6 +404,7 @@
         const itemsList = $("#items-list");
 
         function pickItem(it) {
+            clearFieldError("item");
             $("#item_hidden_id").value = it.id;
             $("#item_name_ro").value = it.item_name;
             $("#item_value_ro").value = it.market_value;
@@ -269,11 +416,14 @@
                 if (radio) radio.checked = on;
             });
 
+            const maxLoan = (it.market_value * MAX_PCT) / 100;
+            const suggested = it.approved_loan
+                ? Math.min(it.approved_loan, maxLoan)
+                : maxLoan;
             const loanInput = $('#lc-modal-body [name="loan_amount"]');
             if (loanInput) {
-                loanInput.value = (
-                    it.approved_loan || it.market_value * 0.7
-                ).toFixed(2);
+                loanInput.value = Number(suggested).toFixed(2);
+                clearFieldError("loan_amount");
                 loanInput.dispatchEvent(new Event("input", { bubbles: true }));
             }
         }
@@ -334,6 +484,7 @@
         }
 
         function selectCustomer(c) {
+            clearFieldError("customer");
             srcInput.value = c.customer_name;
             $("#cust_hidden_id").value = c.id;
             dropdown.style.display = "none";
@@ -394,6 +545,10 @@
         });
 
         $("#lc-modal-body").addEventListener("input", calc);
+        $("#lc-modal-body").addEventListener("input", (e) => {
+            const key = e.target.dataset?.invalid;
+            if (key) clearFieldError(key);
+        });
         calc();
 
         if (preCustomerId) {
@@ -403,13 +558,17 @@
     }
 
     /* ---------- Row actions ---------- */
-    const summary = (c) => `
+    const summary = (c) => {
+        const tax = taxOf(c.accrued_interest);
+        return `
     <div class="calc">
       <div><span>${esc(c.contract_no)} — ${esc(c.customer?.customer_name)}</span><span>${esc(c.item_name)}</span></div>
       <div><span>Principal</span><span>${money(c.loan_amount)}</span></div>
       <div><span>Interest (${c.months_elapsed} month(s) × ${c.interest_rate}%)</span><span>${money(c.accrued_interest)}</span></div>
-      <div class="total"><span>Total to redeem today</span><span>${money(c.total_due)}</span></div>
+      ${TAX_ON ? `<div><span>${esc(TAX_NAME)} (${TAX_RATE}%) on interest</span><span>${money(tax)}</span></div>` : ""}
+      <div class="total"><span>Total to redeem today</span><span>${money(c.total_due + tax)}</span></div>
     </div>`;
+    };
 
     function rowAction(id, action) {
         const c = contracts.find((x) => x.id == id);
@@ -427,7 +586,7 @@
             openModal(
                 "Renew Contract",
                 summary(c) +
-                    `<p>The customer pays the interest above (<strong>${money(c.accrued_interest)}</strong>). Interest restarts today and the due date moves ${c.term_months} month(s) ahead.</p>`,
+                    `<p>The customer pays the interest above (<strong>${money(c.accrued_interest + taxOf(c.accrued_interest))}</strong>${TAX_ON ? " incl. tax" : ""}). Interest restarts today and the due date moves ${c.term_months} month(s) ahead.</p>`,
                 "Confirm renewal",
                 () => post("renew"),
             );
@@ -438,11 +597,29 @@
                 summary(c) +
                     `
       <div class="grid2" style="margin-top:12px">
-        <div class="f"><label>Extend by (days)</label><input name="days" type="number" min="1" value="15"></div>
-        <div class="f"><label>Extension fee ($, optional)</label><input name="fee" type="number" step="0.01" min="0" value="0"></div>
+        <div class="f"><label>Extend by (months)</label><input name="months" type="number" min="1" max="60" value="1"></div>
+        <div class="f"><label>Extension fee (${esc(SYMBOL)}, optional)</label><input name="fee" type="number" step="0.01" min="0" value="0"></div>
       </div><p>Current due date: <strong>${fmtDate(c.due_date)}</strong>. Interest keeps accruing until the contract is renewed or closed.</p>`,
                 "Extend",
-                () => post("extend", { days: val("days"), fee: val("fee") }),
+                () => {
+                    const m = parseInt(val("months"), 10);
+                    if (!m || m < 1 || m > 60) {
+                        const el = $('#lc-modal-body [name="months"]');
+                        showFormErrors([
+                            {
+                                key: "months",
+                                target: el,
+                                msg: "សូមបញ្ចូលចំនួនខែចន្លោះ 1 ដល់ 60។",
+                                mark: el,
+                            },
+                        ]);
+                        return;
+                    }
+                    return post("extend", {
+                        months: m,
+                        fee: val("fee") || 0,
+                    });
+                },
             );
 
         if (action === "redeem")
@@ -459,7 +636,7 @@
                 "Auction item",
                 summary(c) +
                     `
-      <div class="f" style="margin-top:12px"><label>Sale amount ($)</label><input name="sale_amount" type="number" step="0.01" min="0"></div>`,
+      <div class="f" style="margin-top:12px"><label>Sale amount (${esc(SYMBOL)})</label><input name="sale_amount" type="number" step="0.01" min="0"></div>`,
                 "Mark as auctioned",
                 () => post("auction", { sale_amount: val("sale_amount") || 0 }),
             );
@@ -479,6 +656,23 @@
             v && rowAction(e.target.dataset.id, v);
         }
     });
+
+    // ចុចលើជួរដេក → ទៅទំព័រកាលវិភាគបង់ប្រាក់ប្រចាំខែ
+    const openContract = (tr, newTab = false) => {
+        if (!tr?.dataset.id) return;
+        const url = `${showUrl}/${tr.dataset.id}`;
+        newTab ? window.open(url, "_blank") : (window.location.href = url);
+    };
+    $("#lc-body").addEventListener("click", (e) => {
+        // កុំចូល ពេលចុចលើ Actions, ប៊ូតុង, ឬតំណ
+        if (e.target.closest(".act-cell, select, button, a, input")) return;
+        openContract(e.target.closest("tr.lc-row"), e.ctrlKey || e.metaKey);
+    });
+    $("#lc-body").addEventListener("keydown", (e) => {
+        if (e.key !== "Enter" || e.target.closest(".act-cell")) return;
+        openContract(e.target.closest("tr.lc-row"));
+    });
+
     $("#lc-status").addEventListener("change", load);
     let timer;
     $("#lc-search").addEventListener("input", () => {

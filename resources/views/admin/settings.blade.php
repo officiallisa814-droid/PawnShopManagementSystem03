@@ -167,15 +167,18 @@
                             <h4><i class="fa-solid fa-triangle-exclamation"></i> Restore Database</h4>
                             <p class="hint warn">⚠ ទិន្នន័យបច្ចុប្បន្នទាំងអស់នឹងត្រូវជំនួស។ ទាញយក Backup មុន។ / All current
                                 data will be replaced.</p>
-                            <form method="POST" action="{{ route('settings.restore') }}" enctype="multipart/form-data"
-                                onsubmit="return confirm('Restore will REPLACE all current data. Continue?')">
+                            <form id="restore-form" method="POST" action="{{ route('settings.restore') }}"
+                                enctype="multipart/form-data" novalidate>
                                 @csrf
+
+                                <div class="st-alert err" id="restore-err" role="alert" hidden></div>
+
                                 <div class="grid" style="margin-bottom:14px;">
                                     <div class="f"><label>ឯកសារ Backup <span class="km">(.sql)</span></label>
-                                        <input type="file" name="sql_file" accept=".sql,.txt" required>
+                                        <input type="file" name="sql_file" accept=".sql,.txt">
                                     </div>
                                     <div class="f"><label>វាយ <b>RESTORE</b> ដើម្បីបញ្ជាក់</label>
-                                        <input name="confirm" autocomplete="off" required>
+                                        <input name="confirm" autocomplete="off">
                                     </div>
                                 </div>
                                 <button class="btn danger"><i class="fa-solid fa-rotate-left"></i> Restore</button>
@@ -189,5 +192,5 @@
 @endsection
 
 @push('scripts')
-    <script src="{{ asset('js/settings.js') }}"></script>
+<script src="{{ asset('js/​settings.js') }}"></script>
 @endpush

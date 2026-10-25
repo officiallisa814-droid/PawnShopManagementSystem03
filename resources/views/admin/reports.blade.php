@@ -6,7 +6,7 @@
 
 @section('content')
     <div id="rp-app" data-data="{{ route('reports.data') }}">
-       
+
 
         <div class="rp-head">
             <h1>Reports <small>របាយការណ៍</small></h1>
@@ -37,9 +37,9 @@
             <div class="rp-letterhead">
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" class="rp-logo" width="40px">
                 <div class="rp-shop">
-                    <h3>Pawn Shop</h3>
-                    <p>Pawn Shop Management System</p>
-                    <p>Phnom Penh, Cambodia · Tel: ____________________________</p>
+                    <h3>{{ $shop['shop_name'] }}</h3>
+                    <p>{{ $shop['shop_address'] }}</p>
+                    <p>Tel: {{ $shop['shop_phone'] }} {{ $shop['shop_email'] ? '· ' . $shop['shop_email'] : '' }}</p>
                 </div>
             </div>
             <div class="rp-title">

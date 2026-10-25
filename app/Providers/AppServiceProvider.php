@@ -1,32 +1,33 @@
 <?php
 
 namespace App\Providers;
-use Illuminate\Support\Facades\View;
-use App\Models\Setting;
 
+use App\Models\Setting;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
         View::composer('*', function ($view) {
-            try {
-                $view->with('shop', Setting::all_());
-            } catch (\Throwable $e) {
-                $view->with('shop', Setting::DEFAULTS);
+            static $shop = null;
+
+            if ($shop === null) {
+                try {
+                    $shop = Setting::all_();
+                } catch (\Throwable $e) {
+                    // មុន migrate ឬ Table settings មិនទាន់មាន
+                    $shop = Setting::DEFAULTS;
+                }
             }
+
+            $view->with('shop', $shop);
         });
     }
 }

@@ -117,6 +117,11 @@
         font-size: 15px;
         font-weight: 500;
         transition: 0.2s ease;
+        background: none;
+        border: 0;
+        width: 100%;
+        cursor: pointer;
+        text-align: left;
     }
 
     /* Attention color changes on layout interaction */
@@ -190,6 +195,7 @@
         object-fit: contain;
         flex-shrink: 0;
     }
+
 
     /* ===== Responsive ===== */
     .menu-toggle {
@@ -377,8 +383,8 @@
         <aside class="sidebar">
             <div class="logo">
                 <div class="logo-text">
-                    <h2>Pawn Shop</h2>
-                    <p>Pawn Shop Management System</p>
+                    <h2>{{ $shop['shop_name'] }}</h2>
+                    <p><span>{{ $shop['shop_name'] }}</span> Management System</p>
                 </div>
                 <img src="{{ asset('images/logo.png') }}" alt="Logo" class="logo-img">
             </div>
@@ -417,9 +423,12 @@
             </nav>
 
             <div class="sidebar-footer">
-                <a href="#" class="logout-link">
-                    <i class="fa-solid fa-right-from-bracket"></i> Logout
-                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="logout-link">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </form>
             </div>
 
         </aside>

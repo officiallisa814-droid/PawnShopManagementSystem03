@@ -104,7 +104,7 @@ class PawnItemController extends Controller
     public function show($id)
     {
         $item = PawnItem::with(['customer', 'photos', 'loanContracts'])->findOrFail($id);
-        $maxLoan = round(($item->estimated_market_value ?? 0) * config('pawn.max_loan_percent', 70) / 100, 2);
+        $maxLoan = round(($item->estimated_market_value ?? 0) * (float) \App\Models\Setting::get('max_loan_percent', 70) / 100, 2);
         $hasOpen = $item->hasOpenContract();
 
         return view('admin.pawnItem-show', compact('item', 'maxLoan', 'hasOpen'));

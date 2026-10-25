@@ -159,7 +159,7 @@
                         <strong>${{ number_format($item->estimated_market_value ?? 0, 2) }}</strong>
                     </div>
                     <div class="pd-row">
-                        <span>Max loan ({{ config('pawn.max_loan_percent', 70) }}%)</span>
+                        <span>Max loan ({{ $shop['max_loan_percent'] }}%)</span>
                         <strong style="color:#16a34a;">${{ number_format($maxLoan, 2) }}</strong>
                     </div>
                 </div>

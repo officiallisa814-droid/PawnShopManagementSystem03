@@ -60,12 +60,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/reports', [ReportController::class, 'index'])->name('reports');
     Route::get('/reports/data', [ReportController::class, 'data'])->name('reports.data');
 
-    //setting
-    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
-    Route::post('/settings/{group}', [SettingController::class, 'save'])->name('settings.save');
-    Route::get('/settings/backup/download', [SettingController::class, 'backup'])->name('settings.backup');
-    Route::post('/settings/backup/restore', [SettingController::class, 'restore'])->name('settings.restore');
-
     // ----- Pawn Items -----
     Route::get('/pawnItem', [PawnItemController::class, 'index'])->name('pawnItem');
     Route::get('/pawnItem/{id}', [PawnItemController::class, 'show'])->whereNumber('id')->name('pawnItem.show');
@@ -119,4 +113,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/my-pledges', function () {
         return "Welcome to your personal client tracking portal layout view page!";
     })->name('customer.pledges');
+});
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/settings', [SettingController::class, 'index'])->name('settings');
+    Route::post('/settings/{group}', [SettingController::class, 'save'])->name('settings.save');
+    Route::get('/settings/backup/download', [SettingController::class, 'backup'])->name('settings.backup');
+    Route::post('/settings/backup/restore', [SettingController::class, 'restore'])->name('settings.restore');
 });
