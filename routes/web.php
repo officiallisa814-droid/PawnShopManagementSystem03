@@ -9,6 +9,7 @@ use App\Http\Controllers\LoanContractController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Models\Customer;
 use App\Models\PawnItem;
@@ -33,6 +34,12 @@ Route::get('/', function () {
 // 🔒 PROTECTED STAFF ROUTES
 // ==========================================================
 Route::middleware(['auth'])->group(function () {
+    // ----- Profile -----
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::post('/profile/info', [ProfileController::class, 'updateInfo'])->name('profile.info');
+    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar');
+    Route::delete('/profile/avatar', [ProfileController::class, 'removeAvatar'])->name('profile.avatar.remove');
 
     // ----- Dashboard -----
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

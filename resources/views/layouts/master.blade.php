@@ -220,43 +220,162 @@
         min-width: 0;
     }
 
+    /* =======================profile user ===================== */
+    .user-profile {
+        gap: 12px;
+    }
+
+    .hdr-icon-btn {
+        position: relative;
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        border: 0;
+        border-radius: 50%;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 17px;
+        cursor: pointer;
+        transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+    }
+
+    .hdr-icon-btn:hover {
+        background: #dbeafe;
+        color: #1e74ff;
+    }
+
+    .hdr-icon-btn:hover i {
+        animation: hdr-ring 0.6s ease;
+    }
+
+    .hdr-dot {
+        position: absolute;
+        top: 9px;
+        right: 10px;
+        width: 9px;
+        height: 9px;
+        background: #ef4444;
+        border: 2px solid #fff;
+        border-radius: 50%;
+    }
+
+    @keyframes hdr-ring {
+
+        0%,
+        100% {
+            transform: rotate(0);
+        }
+
+        25% {
+            transform: rotate(14deg);
+        }
+
+        50% {
+            transform: rotate(-12deg);
+        }
+
+        75% {
+            transform: rotate(8deg);
+        }
+    }
+
+    .user-chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 4px 14px 4px 4px;
+        border-radius: 999px;
+        text-decoration: none;
+        color: inherit;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .user-chip:hover,
+    .user-chip.active {
+        background: #eff6ff;
+        border-color: #bfdbfe;
+        box-shadow: 0 2px 8px rgba(30, 116, 255, 0.12);
+    }
+
+    .user-avatar-wrap {
+        position: relative;
+        display: block;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        display: block;
+        border: 2px solid #fff;
+        box-shadow: 0 0 0 1px #dbeafe;
+    }
+
+    .user-avatar-letter {
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #1e74ff, #0b2240);
+        color: #fff;
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+    .user-status {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 11px;
+        height: 11px;
+        background: #22c55e;
+        border: 2px solid #fff;
+        border-radius: 50%;
+    }
+
+    .user-info h4 {
+        font-size: 14px;
+        line-height: 1.25;
+        color: #0f172a;
+        font-weight: 700;
+    }
+
+    .user-info span {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11.5px;
+        color: #64748b;
+    }
+
+    .user-info span i {
+        font-size: 10px;
+        color: #f59e0b;
+    }
+
     @media (max-width: 900px) {
-        .menu-toggle {
-            display: inline-block;
+        .user-profile {
+            gap: 8px;
         }
 
-        .dashboard-container {
-            display: block;
+        .user-chip {
+            padding: 3px;
+            background: transparent;
+            border-color: transparent;
         }
 
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            z-index: 999;
-            transform: translateX(-100%);
-            transition: transform .3s ease;
-        }
-
-        .sidebar.open {
-            transform: translateX(0);
-        }
-
-        .sidebar-overlay.show {
-            display: block;
-        }
-
-        .top-header {
-            height: 60px;
-            padding: 0 12px;
-        }
-
-        .user-info span {
+        .user-info {
             display: none;
         }
 
-        .content-body {
-            padding: 14px;
+        .hdr-icon-btn {
+            width: 40px;
+            height: 40px;
         }
     }
 
@@ -445,11 +564,32 @@
                     </button>
                 </div>
                 <div class="user-profile">
-                    <i class="fa-solid fa-bell"></i>
-                    <div class="user-info">
-                        <h4>Admin</h4>
-                        <span>System Administrator</span>
-                    </div>
+                    <button type="button" class="hdr-icon-btn" aria-label="ការជូនដំណឹង" title="ការជូនដំណឹង">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="hdr-dot"></span>
+                    </button>
+
+                    @php $u = auth()->user(); @endphp
+                    <a href="{{ route('profile') }}" class="user-chip {{ request()->is('profile') ? 'active' : '' }}"
+                        title="My Profile">
+                        <span class="user-avatar-wrap">
+                            @if ($u->avatar)
+                                <img src="{{ asset('storage/' . $u->avatar) }}" alt="" class="user-avatar">
+                            @else
+                                <span
+                                    class="user-avatar user-avatar-letter">{{ mb_strtoupper(mb_substr($u->name, 0, 1)) }}</span>
+                            @endif
+                            <span class="user-status" title="Online"></span>
+                        </span>
+
+                        <div class="user-info">
+                            <h4>{{ $u->name }}</h4>
+                            <span>
+                                <i class="fa-solid {{ ($u->role ?? '') === 'admin' ? 'fa-crown' : 'fa-user-tie' }}"></i>
+                                {{ ($u->role ?? '') === 'admin' ? 'System Administrator' : 'Staff' }}
+                            </span>
+                        </div>
+                    </a>
                 </div>
             </header>
 
