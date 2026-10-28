@@ -26,6 +26,9 @@
                 <button type="button" class="tab" data-tab="currency"><i class="fa-solid fa-coins"></i> Currency</button>
                 <button type="button" class="tab" data-tab="backup"><i class="fa-solid fa-database"></i> Backup /
                     Restore</button>
+                <a href="{{ route('users.index') }}" class="tab tab-link">
+                    <i class="fa-solid fa-users-gear"></i> Users &amp; Roles
+                </a>
             </div>
 
             <div>
@@ -192,5 +195,5 @@
 @endsection
 
 @push('scripts')
-<script src="{{ asset('js/​settings.js') }}"></script>
+    <script src="{{ asset('js/​settings.js') }}"></script>
 @endpush

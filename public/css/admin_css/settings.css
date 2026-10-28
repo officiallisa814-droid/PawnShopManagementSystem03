@@ -328,6 +328,13 @@
 .st-tabs .tab.active i {
     color: #fff;
 }
+.st-tabs a.tab {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: inherit;
+}
 
 /* ===== Mobile ===== */
 /* @media (max-width: 900px) {

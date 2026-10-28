@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const root = document.getElementById("st-app");
     if (!root) return;
 
-    const tabs = root.querySelectorAll(".st-tabs .tab");
+    const tabs = root.querySelectorAll(".st-tabs .tab[data-tab]");
     const panes = root.querySelectorAll("[data-pane]");
     const $ = (id) => document.getElementById(id);
 

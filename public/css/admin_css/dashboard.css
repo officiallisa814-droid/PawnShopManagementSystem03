@@ -1,5 +1,10 @@
-/* រៀបចំប្រអប់កាត និងតារាង (Cards & Tables) សម្រាប់តែទំព័រ Dashboard */
-/* Container layout matching original image */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap");
+
+/* អនុវត្ត Font ខ្មែរ និងអង់គ្លេសស្អាតៗគ្រប់កន្លែងទាំងអស់ក្នុង Dashboard */
+body, input, button, select, textarea, table, h1, h2, h3, h4, h5, h6, span {
+    font-family: "Noto Sans Khmer", "Inter", "Segoe UI", sans-serif;
+}
+
 .top-cards {
     display: flex;
     gap: 20px;

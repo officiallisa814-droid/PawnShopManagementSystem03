@@ -29,7 +29,6 @@
             <!-- Filter and Search Row -->
             <div class="filter-section">
                 <span class="filter-title">Customer Directory</span>
-                <p class="filter-subtitle">Search Affairs/Queries, contact numbers, extra, Pledges</p>
 
                 <div class="filter-controls">
                     <div class="input-wrapper">
