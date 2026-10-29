@@ -30,9 +30,12 @@
                     </div>
                     <div class="d-row"><span>Phone</span><span>{{ $contract->customer->phone_number ?? '—' }}</span></div>
                     <div class="d-row"><span>Item</span><span>{{ $contract->item_name }}</span></div>
-                    <div class="d-row"><span>IMEI / Serial</span><span>{{ $contract->pawnItem->imei_serial_tag ?? '—' }}</span></div>
-                    <div class="d-row"><span>Storage</span><span>{{ $contract->pawnItem->storage_location ?? '—' }}</span></div>
-                    <div class="d-row"><span>Principal</span><span>${{ number_format($contract->loan_amount, 2) }}</span></div>
+                    <div class="d-row"><span>IMEI /
+                            Serial</span><span>{{ $contract->pawnItem->imei_serial_tag ?? '—' }}</span></div>
+                    <div class="d-row"><span>Storage</span><span>{{ $contract->pawnItem->storage_location ?? '—' }}</span>
+                    </div>
+                    <div class="d-row"><span>Principal</span><span>${{ number_format($contract->loan_amount, 2) }}</span>
+                    </div>
                     <div class="d-row"><span>Interest rate</span><span>{{ $contract->interest_rate }}% / month</span></div>
                     <div class="d-row"><span>Monthly interest</span><span>${{ number_format($monthly, 2) }}</span></div>
                     <div class="d-row"><span>Loan date</span><span>{{ $contract->loan_date->format('d/m/Y') }}</span></div>
@@ -49,10 +52,27 @@
                             <div><span>Interest ({{ $contract->months_elapsed }} month)</span>
                                 <span>${{ number_format($contract->accrued_interest, 2) }}</span>
                             </div>
+                            <div><span>Interest already paid</span>
+                                <span>-${{ number_format($contract->paid_interest, 2) }}</span>
+                            </div>
                             <div class="big"><span>Total to redeem today</span>
                                 <span>${{ number_format($contract->total_due, 2) }}</span>
                             </div>
                         </div>
+
+                        @can('contracts.auction')
+                            @if ($contract->status === 'expired')
+                                <button type="button" class="d-btn" id="btnAuction"
+                                    style="width:100%;margin-top:14px;background:#dc2626;color:#fff;">
+                                    <i class="fa-solid fa-gavel"></i> ដាក់ដេញថ្លៃ / Auction item
+                                </button>
+                            @else
+                                <p style="margin-top:12px;color:#64748b;font-size:13px;">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                    ដាក់លក់បានតែក្រោយហួសថ្ងៃកំណត់ ({{ $contract->due_date->format('d/m/Y') }})។
+                                </p>
+                            @endif
+                        @endcan
                     @endif
                 </div>
             </div>
@@ -105,10 +125,8 @@
                                             @elseif(!$contract->is_open)
                                                 <span class="lock">Closed</span>
                                             @elseif($s['id'] === $nextId)
-                                                <button type="button" class="d-btn blue js-pay"
-                                                    data-id="{{ $s['id'] }}"
-                                                    data-term="{{ $s['term'] }}"
-                                                    data-amount="{{ $s['amount'] }}">Pay</button>
+                                                <button type="button" class="d-btn blue js-pay" data-id="{{ $s['id'] }}"
+                                                    data-term="{{ $s['term'] }}" data-amount="{{ $s['amount'] }}">Pay</button>
                                             @else
                                                 <span class="lock"><i class="fa-solid fa-lock"></i> បង់ខែមុនសិន</span>
                                             @endif
@@ -160,9 +178,12 @@
     </div>
 
     {{-- ===== Flash messages ===== --}}
-    @if (session('success')) <div class="flash ok" id="flashMsg">{{ session('success') }}</div> @endif
-    @if (session('error'))   <div class="flash err" id="flashMsg">{{ session('error') }}</div> @endif
-    @if ($errors->any())     <div class="flash err" id="flashMsg">{{ $errors->first() }}</div> @endif
+    @if (session('success'))
+    <div class="flash ok" id="flashMsg">{{ session('success') }}</div> @endif
+    @if (session('error'))
+    <div class="flash err" id="flashMsg">{{ session('error') }}</div> @endif
+    @if ($errors->any())
+    <div class="flash err" id="flashMsg">{{ $errors->first() }}</div> @endif
 
     {{-- ===== Pay modal ===== --}}
     <div class="pm-overlay" id="payModal">
@@ -191,27 +212,27 @@
 @endsection
 
 @push('scripts')
-<script>
-(() => {
-    const modal = document.getElementById('payModal');
-    const form = document.getElementById('payForm');
-    const close = () => modal.classList.remove('show');
+    <script>
+        (() => {
+            const modal = document.getElementById('payModal');
+            const form = document.getElementById('payForm');
+            const close = () => modal.classList.remove('show');
 
-    document.querySelectorAll('.js-pay').forEach(b => {
-        b.addEventListener('click', () => {
-            form.action = '{{ url('payments') }}/' + b.dataset.id + '/pay';
-            document.getElementById('payAmount').value = b.dataset.amount;
-            document.getElementById('payTitle').textContent = 'Month ' + b.dataset.term + ' · $' + b.dataset.amount;
-            modal.classList.add('show');
-        });
-    });
-    document.getElementById('payCancel').onclick = close;
-    modal.addEventListener('mousedown', e => { if (e.target === modal) close(); });
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-    form.addEventListener('submit', () => { document.getElementById('paySubmit').disabled = true; });
+            document.querySelectorAll('.js-pay').forEach(b => {
+                b.addEventListener('click', () => {
+                    form.action = '{{ url('payments') }}/' + b.dataset.id + '/pay';
+                    document.getElementById('payAmount').value = b.dataset.amount;
+                    document.getElementById('payTitle').textContent = 'Month ' + b.dataset.term + ' · $' + b.dataset.amount;
+                    modal.classList.add('show');
+                });
+            });
+            document.getElementById('payCancel').onclick = close;
+            modal.addEventListener('mousedown', e => { if (e.target === modal) close(); });
+            document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+            form.addEventListener('submit', () => { document.getElementById('paySubmit').disabled = true; });
 
-    const f = document.getElementById('flashMsg');
-    if (f) setTimeout(() => f.remove(), 4000);
-})();
-</script>
+            const f = document.getElementById('flashMsg');
+            if (f) setTimeout(() => f.remove(), 4000);
+        })();
+    </script>
 @endpush

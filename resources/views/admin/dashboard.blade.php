@@ -105,41 +105,26 @@
                 <h3>Recent Activity</h3>
             </div>
             <div class="activity-list">
-                <div class="activity-item">
-                    <div class="activity-icon green"><i class="fa-solid fa-user-plus"></i></div>
-                    <div class="activity-details">
-                        <h4>New Customer Added</h4>
-                        <span>Today, 10:30 AM</span>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon blue"><i class="fa-solid fa-briefcase"></i></div>
-                    <div class="activity-details">
-                        <h4>Pawn Item Added</h4>
-                        <span>Today, 09:45 AM</span>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon orange"><i class="fa-solid fa-file-invoice"></i></div>
-                    <div class="activity-details">
-                        <h4>Loan Contract Created</h4>
-                        <span>Today, 09:20 AM</span>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon emerald"><i class="fa-solid fa-money-bill-wave"></i></div>
-                    <div class="activity-details">
-                        <h4>Payment Received</h4>
-                        <span>Today, 08:15 AM</span>
-                    </div>
-                </div>
-                <div class="activity-item">
-                    <div class="activity-icon purple"><i class="fa-solid fa-hand-holding-hand"></i></div>
-                    <div class="activity-details">
-                        <h4>Item Redeemed</h4>
-                        <span>Yesterday, 04:40 PM</span>
-                    </div>
-                </div>
+                @php
+                    $activities = [
+                        ['green', 'fa-user-plus', 'New Customer Added', 'Today, 10:30 AM', 'customer', 'customers.view'],
+                        ['blue', 'fa-briefcase', 'Pawn Item Added', 'Today, 09:45 AM', 'pawnItem', 'pawnitems.view'],
+                        ['orange', 'fa-file-invoice', 'Loan Contract Created', 'Today, 09:20 AM', 'loanContract', 'contracts.view'],
+                        ['emerald', 'fa-money-bill-wave', 'Payment Received', 'Today, 08:15 AM', 'payments', 'payments.view'],
+                        ['purple', 'fa-hand-holding-hand', 'Item Redeemed', 'Yesterday, 04:40 PM', 'loanContract', 'contracts.view'],
+                    ];
+                @endphp
+
+                @foreach ($activities as [$color, $icon, $title, $time, $route, $perm])
+                    @php $ok = auth()->user()->can($perm); @endphp
+                    <{{ $ok ? 'a' : 'div' }} class="activity-item" @if ($ok) href="{{ route($route) }}" @endif>
+                        <div class="activity-icon {{ $color }}"><i class="fa-solid {{ $icon }}"></i></div>
+                        <div class="activity-details">
+                            <h4>{{ $title }}</h4>
+                            <span>{{ $time }}</span>
+                        </div>
+                    </{{ $ok ? 'a' : 'div' }}>
+                @endforeach
             </div>
         </div>
 

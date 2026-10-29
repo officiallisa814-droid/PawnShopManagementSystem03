@@ -344,3 +344,139 @@
     font-weight: 600;
     cursor: pointer;
 }
+/* ===== Mobile / Tablet ===== */
+.cs-grid > div {
+    min-width: 0;
+}
+.cs-row span:last-child {
+    word-break: break-word;
+    min-width: 0;
+}
+
+@media (max-width: 1000px) {
+    .cs-card {
+        text-align: left;
+    }
+    .cs-photo img {
+        max-width: 220px;
+    }
+}
+
+@media (max-width: 640px) {
+    .cs-top {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-bottom: 14px;
+    }
+    .cs-btn {
+        justify-content: center;
+        padding: 12px 10px;
+        font-size: 13.5px;
+    }
+
+    .cs-card {
+        padding: 14px;
+        margin-bottom: 14px;
+        border-radius: 12px;
+    }
+    .cs-title {
+        font-size: 15px;
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+    }
+
+    .cs-photo {
+        padding: 14px;
+    }
+    .cs-photo img {
+        max-width: 150px;
+        border-width: 3px;
+    }
+    .cs-noimg {
+        width: 130px;
+        height: 130px;
+        font-size: 44px;
+    }
+    .cs-name {
+        font-size: 20px;
+        margin-top: 12px;
+        word-break: break-word;
+    }
+
+    .cs-row {
+        font-size: 13px;
+        padding: 9px 0;
+        gap: 10px;
+    }
+
+    .cs-items {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .cs-item img,
+    .cs-item .ni {
+        height: 90px;
+    }
+
+    .cs-table {
+        min-width: 560px;
+        font-size: 13px;
+    }
+    .cs-table th,
+    .cs-table td {
+        padding: 8px 10px;
+        white-space: nowrap;
+    }
+
+    .cs-foot {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    /* ===== Edit modal ===== */
+    .cs-overlay {
+        padding: 10px;
+        align-items: center;
+    }
+    .cs-modal {
+        max-height: 94dvh;
+        border-radius: 12px;
+    }
+    .cs-mh {
+        padding: 12px 16px;
+    }
+    .cs-mh h3 {
+        font-size: 0.95rem;
+    }
+    .cs-mb {
+        padding: 14px;
+        -webkit-overflow-scrolling: touch;
+    }
+    .cs-fg {
+        gap: 12px;
+    }
+
+    .cs-fg input,
+    .cs-fg select,
+    .cs-fg textarea {
+        font-size: 16px;
+        padding: 11px 12px;
+    }
+    .cs-mf {
+        padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+    }
+    .cs-mf button {
+        flex: 1;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 380px) {
+    .cs-top {
+        grid-template-columns: 1fr;
+    }
+    .cs-items {
+        grid-template-columns: 1fr 1fr;
+    }
+}

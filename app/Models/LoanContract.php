@@ -51,7 +51,7 @@ class LoanContract extends Model
         'interest_rate' => 'float',
     ];
 
-    protected $appends = ['months_elapsed', 'accrued_interest', 'total_due', 'days_overdue', 'is_open'];
+    protected $appends = ['months_elapsed', 'accrued_interest', 'paid_interest', 'interest_due', 'total_due', 'days_overdue', 'is_open'];
 
     /* ---------- Relationships ---------- */
 
@@ -115,9 +115,27 @@ class LoanContract extends Model
         return round($this->loan_amount * ($this->interest_rate / 100) * $this->months_elapsed, 2);
     }
 
+    protected ?float $paidInterestCache = null;
+
+    /** ការប្រាក់ដែលបានបង់រួច (ក្នុងវដ្តបច្ចុប្បន្ន) */
+    public function getPaidInterestAttribute(): float
+    {
+        return $this->paidInterestCache ??= round((float) DB::table('payment_schedules')
+            ->where('loan_contract_id', $this->id)
+            ->where('status', 'paid')
+            ->whereDate('paid_date', '>=', $this->interest_from->toDateString())
+            ->sum(DB::raw('COALESCE(paid_amount, interest_amount)')), 2);
+    }
+
+    /** ការប្រាក់ដែលនៅជំពាក់ = ដែលកើតឡើង − ដែលបានបង់ */
+    public function getInterestDueAttribute(): float
+    {
+        return max(0, round($this->accrued_interest - $this->paid_interest, 2));
+    }
+
     public function getTotalDueAttribute(): float
     {
-        return round($this->loan_amount + $this->accrued_interest, 2);
+        return round($this->loan_amount + $this->interest_due, 2);
     }
 
     public function getDaysOverdueAttribute(): int

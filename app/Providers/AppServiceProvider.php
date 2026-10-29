@@ -6,6 +6,7 @@ use App\Models\Setting;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use App\Support\Notifications;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +17,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // ១. ចែក $shop ទៅគ្រប់ View
         View::composer('*', function ($view) {
             static $shop = null;
 
@@ -29,6 +29,15 @@ class AppServiceProvider extends ServiceProvider
             }
 
             $view->with('shop', $shop);
+        });
+
+        // ២. Notifications សម្រាប់ layout តែមួយ
+        View::composer('layouts.master', function ($view) {
+            try {
+                $view->with('notifs', Notifications::all());
+            } catch (\Throwable $e) {
+                $view->with('notifs', []);
+            }
         });
 
         // ២. កំណត់ Gate សម្រាប់គ្រប់សិទ្ធិក្នុង config/roles.php

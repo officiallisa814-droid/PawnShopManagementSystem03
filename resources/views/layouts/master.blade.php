@@ -330,6 +330,81 @@
             color: #f59e0b;
         }
 
+        .nf-wrap {
+            position: relative
+        }
+
+        .nf-menu {
+            position: absolute;
+            right: 0;
+            top: 52px;
+            width: 320px;
+            max-width: calc(100vw - 24px);
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, .18);
+            z-index: 200;
+            overflow: hidden
+        }
+
+        .nf-menu[hidden] {
+            display: none
+        }
+
+        .nf-head {
+            padding: 12px 16px;
+            font-weight: 700;
+            color: #0b2240;
+            border-bottom: 1px solid #eef2f7
+        }
+
+        .nf-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            text-decoration: none;
+            color: #1e293b;
+            font-size: 14px;
+            border-bottom: 1px solid #f1f5f9
+        }
+
+        .nf-item:hover {
+            background: #f8fafc
+        }
+
+        .nf-ic {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0
+        }
+
+        .nf-ic.red {
+            background: #fee2e2;
+            color: #dc2626
+        }
+
+        .nf-ic.amber {
+            background: #fef3c7;
+            color: #d97706
+        }
+
+        .nf-ic.blue {
+            background: #dbeafe;
+            color: #2563eb
+        }
+
+        .nf-empty {
+            padding: 20px;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 14px
+        }
+
         /* =====================================================
            MOBILE / TABLET  (≤ 900px)
            ===================================================== */
@@ -589,30 +664,46 @@
             </div>
 
             <nav class="menu-links">
-                <a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">
-                    <i class="fa-solid fa-chart-pie"></i> Dashboard
-                </a>
-                <a href="{{ route('customer') }}" class="{{ request()->is('customer') ? 'active' : '' }}">
-                    <i class="fa-solid fa-users"></i> Customer
-                </a>
-                <a href="{{ route('pawnItem') }}" class="{{ request()->is('pawnItem') ? 'active' : '' }}">
-                    <i class="fa-solid fa-box"></i> Pawn Item
-                </a>
-                <a href="{{ route('loanContract') }}" class="{{ request()->is('loanContract') ? 'active' : '' }}">
-                    <i class="fa-solid fa-file-contract"></i> Loan Contract
-                </a>
-                <a href="{{ route('payments') }}" class="{{ request()->is('payments') ? 'active' : '' }}">
-                    <i class="fa-solid fa-credit-card"></i> Payments
-                </a>
-                <a href="{{ route('auction-sales') }}" class="{{ request()->is('auction-sales') ? 'active' : '' }}">
-                    <i class="fa-solid fa-gavel"></i> Auction & Sales
-                </a>
-                <a href="{{ route('reports') }}" class="{{ request()->is('reports') ? 'active' : '' }}">
-                    <i class="fa-solid fa-chart-column"></i> Reports
-                </a>
-                <a href="{{ route('settings') }}" class="{{ request()->is('settings') ? 'active' : '' }}">
-                    <i class="fa-solid fa-gear"></i> Settings
-                </a>
+                @can('dashboard.view')
+                    <a href="{{ route('dashboard') }}" class="{{ request()->is('dashboard') ? 'active' : '' }}">
+                        <i class="fa-solid fa-chart-pie"></i> Dashboard
+                    </a>
+                @endcan
+                @can('customers.view')
+                    <a href="{{ route('customer') }}" class="{{ request()->is('customer*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-users"></i> Customer
+                    </a>
+                @endcan
+                @can('pawnitems.view')
+                    <a href="{{ route('pawnItem') }}" class="{{ request()->is('pawnItem*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-box"></i> Pawn Item
+                    </a>
+                @endcan
+                @can('contracts.view')
+                    <a href="{{ route('loanContract') }}" class="{{ request()->is('loanContract*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-file-contract"></i> Loan Contract
+                    </a>
+                @endcan
+                @can('payments.view')
+                    <a href="{{ route('payments') }}" class="{{ request()->is('payments*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-credit-card"></i> Payments
+                    </a>
+                @endcan
+                @can('auctions.view')
+                    <a href="{{ route('auction-sales') }}" class="{{ request()->is('auction-sales*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-gavel"></i> Auction & Sales
+                    </a>
+                @endcan
+                @can('reports.view')
+                    <a href="{{ route('reports') }}" class="{{ request()->is('reports*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-chart-column"></i> Reports
+                    </a>
+                @endcan
+                @can('settings.manage')
+                    <a href="{{ route('settings') }}" class="{{ request()->is('settings*', 'users*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-gear"></i> Settings
+                    </a>
+                @endcan
             </nav>
 
             <div class="sidebar-footer">
@@ -637,10 +728,24 @@
                 </div>
 
                 <div class="user-profile">
-                    <button type="button" class="hdr-icon-btn" aria-label="ការជូនដំណឹង" title="ការជូនដំណឹង">
-                        <i class="fa-regular fa-bell"></i>
-                        <span class="hdr-dot"></span>
-                    </button>
+                    <div class="nf-wrap">
+                        <button type="button" class="hdr-icon-btn" id="nfBtn" aria-label="ការជូនដំណឹង"
+                            title="ការជូនដំណឹង">
+                            <i class="fa-regular fa-bell"></i>
+                            @if(count($notifs ?? []))<span class="hdr-dot"></span>@endif
+                        </button>
+                        <div class="nf-menu" id="nfMenu" hidden>
+                            <div class="nf-head">ការជូនដំណឹង</div>
+                            @forelse(($notifs ?? []) as $n)
+                                <a href="{{ $n['url'] }}" class="nf-item">
+                                    <span class="nf-ic {{ $n['color'] }}"><i class="fa-solid {{ $n['icon'] }}"></i></span>
+                                    <span>{{ $n['text'] }}</span>
+                                </a>
+                            @empty
+                                <div class="nf-empty">មិនមានការជូនដំណឹងថ្មី</div>
+                            @endforelse
+                        </div>
+                    </div>
 
                     @php $u = auth()->user(); @endphp
                     <a href="{{ route('profile') }}" class="user-chip {{ request()->is('profile') ? 'active' : '' }}"
@@ -701,6 +806,14 @@
             window.addEventListener('resize', function () {
                 if (window.innerWidth > 900) toggle(false);
             });
+        })();
+
+        
+        (function () {
+            var b = document.getElementById('nfBtn'), m = document.getElementById('nfMenu');
+            if (!b || !m) return;
+            b.addEventListener('click', function (e) { e.stopPropagation(); m.hidden = !m.hidden });
+            document.addEventListener('click', function (e) { if (!m.contains(e.target)) m.hidden = true });
         })();
     </script>
 </body>

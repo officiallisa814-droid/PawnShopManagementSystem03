@@ -559,12 +559,13 @@
 
     /* ---------- Row actions ---------- */
     const summary = (c) => {
-        const tax = taxOf(c.accrued_interest);
+        const tax = taxOf(c.interest_due);
         return `
     <div class="calc">
       <div><span>${esc(c.contract_no)} — ${esc(c.customer?.customer_name)}</span><span>${esc(c.item_name)}</span></div>
       <div><span>Principal</span><span>${money(c.loan_amount)}</span></div>
       <div><span>Interest (${c.months_elapsed} month(s) × ${c.interest_rate}%)</span><span>${money(c.accrued_interest)}</span></div>
+      <div><span>Interest already paid</span><span>-${money(c.paid_interest)}</span></div>
       ${TAX_ON ? `<div><span>${esc(TAX_NAME)} (${TAX_RATE}%) on interest</span><span>${money(tax)}</span></div>` : ""}
       <div class="total"><span>Total to redeem today</span><span>${money(c.total_due + tax)}</span></div>
     </div>`;

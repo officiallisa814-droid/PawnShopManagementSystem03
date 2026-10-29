@@ -25,9 +25,9 @@
             </div>
         @endif
 
-        <a href="{{ route('settings') }}" class="us-back">
-            <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> ត្រឡប់ទៅ Settings
-        </a>
+            <a href="{{ route('settings') }}" class="us-back">
+                <i class="fa-solid fa-arrow-left" aria-hidden="true"></i> ត្រឡប់ទៅ Settings
+            </a>
 
         {{-- ================= Header ================= --}}
         <div class="us-head">
@@ -60,7 +60,8 @@
         {{-- ================= Pending signups ================= --}}
         @if ($pending->isNotEmpty())
             <section class="us-pending">
-                <h2><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i> សំណើរង់ចាំអនុម័ត <em>{{ $pending->count() }}</em></h2>
+                <h2><i class="fa-solid fa-hourglass-half" aria-hidden="true"></i> សំណើរង់ចាំអនុម័ត
+                    <em>{{ $pending->count() }}</em></h2>
                 <p>អ្នកទាំងនេះបានចុះឈ្មោះ ប៉ុន្តែមិនទាន់អាចចូលប្រព័ន្ធបានទេ រហូតដល់អ្នកកំណត់ Role។</p>
                 @foreach ($pending as $p)
                     <div class="us-pend-row">

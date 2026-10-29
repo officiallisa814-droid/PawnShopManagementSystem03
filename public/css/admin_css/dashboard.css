@@ -78,6 +78,16 @@ body, input, button, select, textarea, table, h1, h2, h3, h4, h5, h6, span {
     background-color: #fff7ed;
     color: #ea580c;
 }
+a.activity-item {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: background 0.15s ease;
+}
+a.activity-item:hover {
+    background: #f1f5f9;
+}
 
 
 

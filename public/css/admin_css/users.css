@@ -65,6 +65,51 @@
     background: #ede9fe;
     color: #5b21b6;
 }
+.us-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    text-decoration: none;
+
+    font-family: "Inter", "Kantumruy Pro", sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #334155;
+    background-color: #f1f5f9;
+
+    /* ទ្រង់ទ្រាយ & Border */
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    cursor: pointer;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease-in-out;
+    outline: none;
+    user-select: none;
+}
+
+.us-back:hover {
+    background-color: #ffffff;
+    color: #0f172a;
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transform: translateX(-3px);
+}
+
+.us-back:active {
+    transform: translateX(-1px) scale(0.98);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.us-back i {
+    transition: transform 0.25s ease;
+}
+
+.us-back:hover i {
+    transform: translateX(-3px);
+}
 
 /* ---------- Toast ---------- */
 .us-toast {
@@ -367,25 +412,44 @@
 }
 
 /* ---------- Dialog ---------- */
+/* Dialog: ប្រអប់ការេ នៅកណ្ដាលអេក្រង់ */
 .us-dialog {
-    border: 0;
-    padding: 0;
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(560px, calc(100vw - 32px));
+    height: fit-content;
+    max-height: 88vh;
     border-radius: 18px;
-    width: min(600px, 94vw);
-    max-height: 92vh;
-    box-shadow: 0 25px 50px rgba(15, 23, 42, 0.35);
-    color: #0f172a;
+    overflow: hidden;
 }
-.us-dialog::backdrop {
-    background: rgba(15, 23, 42, 0.55);
-    backdrop-filter: blur(3px);
+.us-dialog.small {
+    width: min(420px, calc(100vw - 32px));
 }
 .us-dialog form {
+    max-height: 88vh;
+}
+
+/* .us-dialog form {
     display: flex;
     flex-direction: column;
     max-height: 92vh;
     margin: 0;
+} */
+
+.us-mx tbody tr:nth-child(odd) {
+    background-color: #f0f9ff;
 }
+
+.us-mx tbody tr:hover {
+    background-color: #e0f2fe;
+}
+
+.us-dialog::backdrop {
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(3px);
+}
+
 .us-dialog header {
     display: flex;
     justify-content: space-between;
@@ -593,194 +657,7 @@
 .us-self i {
     margin-right: 6px;
 }
-
-/* =====================================================
-   Responsive
-   ===================================================== */
-@media (max-width: 900px) {
-    .us-roles {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .us-toast {
-        top: 70px;
-    }
-}
-
-@media (max-width: 760px) {
-    /* តារាង → កាត */
-    .us-card:not(.us-matrix) {
-        background: transparent;
-        border: 0;
-        box-shadow: none;
-        overflow: visible;
-    }
-    .us-table,
-    .us-table tbody {
-        display: block;
-    }
-    .us-table thead {
-        display: none;
-    }
-    .us-table tr {
-        display: block;
-        margin-bottom: 12px;
-        background: #fff;
-        border: 1px solid #e2e8f0;
-        border-radius: 16px;
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
-        overflow: hidden;
-    }
-    .us-table td {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 12px;
-        padding: 11px 16px;
-        border-bottom: 1px solid #f1f5f9;
-    }
-    .us-table td::before {
-        content: attr(data-label);
-        color: #64748b;
-        font-size: 12px;
-        font-weight: 600;
-        flex-shrink: 0;
-    }
-    .us-table td:first-child {
-        background: #f8fafc;
-    }
-    .us-table td:first-child::before {
-        display: none;
-    }
-    .us-table td.us-act {
-        justify-content: flex-end;
-        border-bottom: 0;
-        padding: 10px 16px 14px;
-    }
-    .us-table td.us-act::before {
-        display: none;
-    }
-    .us-icon-btn {
-        width: 44px;
-        height: 44px;
-    }
-}
-
-@media (max-width: 640px) {
-    .us-toast {
-        left: 12px;
-        right: 12px;
-        top: 68px;
-        justify-content: center;
-    }
-    .us-head {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .us-head .us-btn {
-        width: 100%;
-        height: 48px;
-    }
-    .us-title h1 {
-        font-size: 19px;
-    }
-    .us-title h1 small {
-        display: block;
-        margin: 2px 0 0;
-    }
-    .us-role {
-        padding: 12px;
-        gap: 10px;
-    }
-    .us-role .us-ic {
-        width: 38px;
-        height: 38px;
-        font-size: 15px;
-    }
-    .us-role em {
-        font-size: 18px;
-    }
-
-    /* Dialog → Bottom sheet */
-    .us-dialog {
-        width: 100%;
-        max-width: 100%;
-        margin: auto 0 0;
-        border-radius: 20px 20px 0 0;
-        max-height: 94vh;
-    }
-    .us-dialog form {
-        max-height: 94vh;
-    }
-    .us-body {
-        padding: 18px 16px;
-    }
-    .us-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-    /* font 16px ការពារ iOS zoom */
-    .us-input input,
-    .us-input select {
-        font-size: 16px;
-        height: 50px;
-    }
-    .us-dialog footer {
-        padding: 12px 16px;
-    }
-    .us-dialog footer .us-btn {
-        flex: 1;
-        height: 48px;
-    }
-}
-
-@media (max-width: 360px) {
-    .us-roles {
-        grid-template-columns: 1fr;
-    }
-}
-
-/* ---------- Back link / slate / pending ---------- */
-.us-back {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 14px;
-    color: #475569;
-    font-size: 13.5px;
-    font-weight: 600;
-    text-decoration: none;
-}
-.us-back:hover {
-    color: #2563eb;
-}
-.us-ic.slate {
-    background: #f1f5f9;
-    color: #64748b;
-}
-.us-badge.slate {
-    background: #f1f5f9;
-    color: #475569;
-}
-.us-btn.danger {
-    color: #dc2626;
-    border-color: #fecaca;
-}
-.us-btn.danger:hover {
-    background: #fef2f2;
-}
-.us-dialog.small {
-    width: min(440px, 94vw);
-}
-.us-ap-who {
-    margin: 0 0 16px;
-    font-weight: 700;
-    color: #0b2240;
-}
-.us-ap-who i {
-    margin-right: 8px;
-    color: #2563eb;
-}
-
+/* ===== Pending approvals ===== */
 .us-pending {
     margin-bottom: 20px;
     padding: 18px 20px;
@@ -791,14 +668,14 @@
 .us-pending h2 {
     margin: 0 0 4px;
     font-size: 16px;
+    font-weight: 700;
     color: #92400e;
-}
-.us-pending h2 i {
-    margin-right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 .us-pending h2 em {
     font-style: normal;
-    margin-left: 8px;
     padding: 2px 10px;
     border-radius: 999px;
     background: #f59e0b;
@@ -810,6 +687,7 @@
     color: #a16207;
     font-size: 13.5px;
 }
+
 .us-pend-row {
     display: flex;
     align-items: center;
@@ -820,12 +698,25 @@
     border: 1px solid #fde68a;
     border-radius: 12px;
 }
+.us-pend-row .us-av {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, #1e74ff, #0b2240);
+    color: #fff;
+    font-weight: 700;
+}
 .us-pend-info {
     flex: 1;
     min-width: 0;
 }
 .us-pend-info b {
     display: block;
+    font-size: 14.5px;
+    color: #0f172a;
 }
 .us-pend-info small {
     display: block;
@@ -833,34 +724,180 @@
     font-size: 12.5px;
     word-break: break-all;
 }
+
 .us-pend-act {
     display: flex;
     gap: 8px;
+    flex-shrink: 0;
 }
 .us-pend-act form {
     margin: 0;
 }
 .us-pend-act .us-btn {
     height: 40px;
-    padding: 0 14px;
+    padding: 0 16px;
+}
+
+/* =====================================================
+   Responsive
+   ===================================================== */
+#us-app,
+#us-app .us-card,
+#us-app .us-user > div {
+    min-width: 0;
+}
+.us-table td {
+    word-break: break-word;
+}
+@media (max-width: 760px) {
+    /* បិទកុំឱ្យតារាងបង្ហាញធម្មតា */
+    .us-table, 
+    .us-table thead, 
+    .us-table tbody, 
+    .us-table tr, 
+    .us-table th, 
+    .us-table td {
+        display: block;
+        width: 100% !important;
+    }
+
+    /* លាក់ Header របស់តារាង */
+    .us-table thead {
+        display: none;
+    }
+
+    /* ធ្វើឱ្យជួរនីមួយៗ (Row) ក្លាយជារាង Card ដាច់ដោយឡែកពីគ្នា */
+    .us-table tbody tr {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        margin-bottom: 14px;
+        padding: 14px;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+        position: relative;
+    }
+
+    /* រៀបចំធាតុខាងក្នុង Card នីមួយៗឱ្យមានរបៀបរៀបរយ */
+    .us-table td {
+        border: none !important;
+        padding: 6px 0 !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    /* ផ្នែកឈ្មោះអ្នកប្រើប្រាស់ */
+    .us-table td[data-label="អ្នកប្រើ"] {
+        justify-content: flex-start;
+        padding-bottom: 10px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        margin-bottom: 8px;
+    }
+
+    /* បន្ថែម Label បង្ហាញពីមុខទិន្នន័យ (Role, ស្ថានភាព, ចូលរួម) ស្វ័យប្រវត្តិ */
+    .us-table td:not([data-label="អ្នកប្រើ"]):not(.us-act)::before {
+        content: attr(data-label);
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748b;
+    }
+
+    /* ផ្នែកប៊ូតុងសកម្មភាព (Action Buttons) នៅខាងក្រោមគេបង្អស់ */
+    .us-table td.us-act {
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 10px;
+        padding-top: 10px !important;
+        border-top: 1px solid #f1f5f9 !important;
+    }
+
+    .us-table td.us-act .us-icon-btn {
+        flex: 1;
+        width: auto;
+        height: 40px;
+    }
+
+    .us-table td.us-act form {
+        flex: 1;
+        display: flex;
+    }
+
+    .us-table td.us-act form .us-icon-btn {
+        width: 100%;
+    }
 }
 
 @media (max-width: 640px) {
-    .us-pend-row {
-        flex-wrap: wrap;
+    .us-dialog {
+        width: calc(100vw - 24px);
     }
-    .us-pend-info {
-        flex-basis: calc(100% - 60px);
+    .us-dialog form {
+        max-height: 94dvh;
+    }
+    .us-body {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .us-dialog footer {
+        position: sticky;
+        bottom: 0;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    }
+    .us-roles {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .us-role-txt small {
+        white-space: normal;
+    }
+
+    /* Pending responsive adjustments for mobile */
+    .us-pend-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
     }
     .us-pend-act {
-        width: 100%;
-    }
-    .us-pend-act form,
-    .us-pend-act .js-approve {
-        flex: 1;
+        display: flex;
+        justify-content: flex-end;
     }
     .us-pend-act .us-btn {
+        flex: 1;
+        justify-content: center;
+    }
+    .us-pend-act form {
+        flex: 1;
+        display: flex;
+    }
+    .us-pend-act form button {
         width: 100%;
-        height: 46px;
+    }
+
+    .us-mx th,
+    .us-mx td {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    .us-mx th:first-child,
+    .us-mx td:first-child {
+        position: sticky;
+        left: 0;
+        background: #fff;
+        z-index: 1;
+    }
+    .us-back {
+        margin-bottom: 10px;
+    }
+    .us-state {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 360px) {
+    .us-dialog header {
+        padding: 14px 16px;
+    }
+    .us-dialog header h2 {
+        font-size: 15px;
     }
 }
