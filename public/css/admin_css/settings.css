@@ -1,3 +1,20 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap");
+
+#st-app,
+#st-app *:not(i) {
+    font-family: "Noto Sans Khmer", "Inter", "Segoe UI", sans-serif;
+}
+
+#st-app {
+    width: 100%;
+    margin: 0 auto;
+    color: #0f172a;
+}
+
+#st-app [hidden] {
+    display: none !important;
+}
+
 #st-app {
     --navy: #0f2a5a;
     --brass: #b8862b;
@@ -158,7 +175,7 @@
 }
 .f input:focus {
     border-color: #2563eb;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    /* box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12); */
 }
 .f .hint-s {
     font-size: 0.78rem;

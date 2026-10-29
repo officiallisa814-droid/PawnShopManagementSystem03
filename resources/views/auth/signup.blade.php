@@ -23,10 +23,7 @@
             align-items: center;
             justify-content: center;
             padding: 16px;
-            background:
-                radial-gradient(circle at 15% 20%, rgba(30, 116, 255, .2) 0, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(11, 34, 64, .18) 0, transparent 45%),
-                #eef2f7;
+            background: #0b2240;
             font-family: "Noto Sans Khmer", "Inter", "Segoe UI", sans-serif;
             color: #0f172a;
         }
@@ -50,7 +47,7 @@
             border-radius: 16px;
             font-size: 24px;
             color: #fff;
-            background: linear-gradient(135deg, #1e74ff, #0b2240);
+            /* background: linear-gradient(135deg, #1e74ff, #0b2240); */
         }
 
         h1 {
@@ -115,7 +112,6 @@
 
         .in input:focus {
             border-color: #2563eb;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, .14);
         }
 
         .field.bad .in input {
@@ -281,7 +277,8 @@
             </div>
         @else
             {{-- ===== Form ===== --}}
-            <div class="logo"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></div>
+            <!-- <div class="logo"><i class="fa-solid fa-user-plus" aria-hidden="true"></i></div> -->
+            <div class="logo"><img src="{{ asset('images/logo.png') }}" alt="logo" width="60px"></div>
             <h1>ចុះឈ្មោះគណនីថ្មី</h1>
             <p class="sub">បំពេញព័ត៌មានខាងក្រោម ដើម្បីស្នើសុំគណនី</p>
 

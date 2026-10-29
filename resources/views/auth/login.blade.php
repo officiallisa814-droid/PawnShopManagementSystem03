@@ -1,17 +1,17 @@
 <x-guest-layout>
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}?v=4">
     <style>
-        .title{
+        .title {
             margin: 0 auto;
             color: #fffff;
         }
     </style>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-   <div class="text-center mb-6">
-            <h2 class="text-2xl font-bold text-white dark:text-white tracking-tight">Pawn Shop System Login</h2>
-        </div>
-    <form method="POST" action="{{ route('login') }}">
+    <div class="text-center mb-6">
+        <h2 class="text-2xl font-bold text-white dark:text-white tracking-tight">Pawn Shop System Login</h2>
+    </div>
+    <form method="POST" action="{{ route('login') }}" novalidate>
         @csrf
 
         <!-- Email Address -->
@@ -54,10 +54,48 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
-         <div class="mt-4 text-left">
+        <div class="mt-4 text-left">
             <a href="{{ route('signup') }}" class="underline text-sm text-gray-400 hover:text-white">
                 <span class="Khmer-font">មិនទាន់មានគណនី? ចុះឈ្មោះ</span>/ Register
             </a>
         </div>
     </form>
 </x-guest-layout>
+<script>
+    (() => {
+        const form = document.querySelector('form[action="{{ route('login') }}"]');
+        if (!form) return;
+
+        const clear = (input) => {
+            input.parentElement.querySelectorAll('.js-err').forEach(n => n.remove());
+            input.parentElement.querySelectorAll('ul').forEach(u => u.style.display = 'none');
+            input.style.borderColor = '';
+        };
+        const show = (input, msg) => {
+            clear(input);
+            const p = document.createElement('p');
+            p.className = 'js-err';
+            p.style.cssText = 'color:#f87171;font-size:14px;margin-top:8px;';
+            p.textContent = msg;
+            input.insertAdjacentElement('afterend', p);
+            input.style.borderColor = '#f87171';
+        };
+
+        const email = form.querySelector('[name="email"]');
+        const pass = form.querySelector('[name="password"]');
+
+        [email, pass].forEach(i => i.addEventListener('input', () => clear(i)));
+
+        form.addEventListener('submit', (e) => {
+            let bad = null;
+            const v = email.value.trim();
+
+            if (!v) { show(email, 'សូមបញ្ចូលអ៊ីមែល។'); bad = bad || email; }
+            else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) { show(email, 'អ៊ីមែលមិនត្រឹមត្រូវ។'); bad = bad || email; }
+
+            if (!pass.value) { show(pass, 'សូមបញ្ចូលពាក្យសម្ងាត់។'); bad = bad || pass; }
+
+            if (bad) { e.preventDefault(); bad.focus(); }
+        });
+    })();
+</script>

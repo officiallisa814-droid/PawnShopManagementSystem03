@@ -5,7 +5,7 @@
     font-family: "Noto Sans Khmer", "Inter", "Segoe UI", sans-serif;
 }
 #us-app {
-    max-width: 1100px;
+    max-width: 100%;
     margin: 0 auto;
     color: #0f172a;
 }
@@ -562,7 +562,7 @@
 .us-input input:focus,
 .us-input select:focus {
     border-color: #2563eb;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+    /* box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14); */
 }
 .us-input select:disabled {
     background: #f1f5f9;

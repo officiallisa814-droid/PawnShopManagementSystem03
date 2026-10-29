@@ -423,7 +423,7 @@
 }
 .pf-input input:focus {
     border-color: #2563eb;
-    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+    /* box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14); */
 }
 .pf-input input::placeholder {
     color: #94a3b8;

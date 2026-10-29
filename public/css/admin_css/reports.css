@@ -1,3 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600;700&display=swap");
+
+/* Scope font definitions to the reports app module */
+#rp-app,
+#rp-app *:not(i) {
+    font-family:
+        "Noto Sans Khmer", "Inter", "Segoe UI", Tahoma, Geneva, Verdana,
+        sans-serif;
+}
+
+#rp-app {
+    max-width: 100%;
+    margin: 0 auto;
+    color: #0f172a;
+}
+
+#rp-app [hidden] {
+    display: none !important;
+}
 #rp-app {
     --navy: #0f2a5a;
     --brass: #b8862b;

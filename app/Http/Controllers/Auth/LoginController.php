@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class LoginController extends Controller
 {
@@ -16,14 +17,22 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ], [
+            'email.required' => 'សូមបញ្ចូលអ៊ីមែល។',
+            'email.email' => 'អ៊ីមែលមិនត្រឹមត្រូវ។',
+            'password.required' => 'សូមបញ្ចូលពាក្យសម្ងាត់។',
         ]);
 
         if (!Auth::attempt($credentials, $request->boolean('remember'))) {
+            // អ៊ីមែលរកមិនឃើញ → កំហុសលើអ៊ីមែល, បើមិនដូច្នោះ → កំហុសលើពាក្យសម្ងាត់
+            $field = User::where('email', $credentials['email'])->exists() ? 'password' : 'email';
+            $msg = $field === 'password' ? 'ពាក្យសម្ងាត់មិនត្រឹមត្រូវ។' : 'អ៊ីមែលមិនត្រឹមត្រូវ។';
+
             return back()
                 ->withInput($request->only('email'))
-                ->withErrors(['email' => 'អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។']);
+                ->withErrors([$field => $msg]);
         }
 
         $user = Auth::user();
