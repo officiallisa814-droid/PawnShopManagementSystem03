@@ -1,9 +1,9 @@
 services:
   - type: web
     name: pawn-shop-management-system
-    env: php
+    env: docker
     plan: free
-    buildCommand: "composer install --no-dev --optimize-autoloader"
+    buildCommand: ""
     startCommand: "php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=$PORT"
     envVars:
       - key: APP_KEY
