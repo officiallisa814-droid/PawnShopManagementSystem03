@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: pawn-shop-management-system
+    env: php
+    plan: free
+    buildCommand: "composer install --no-dev --optimize-autoloader"
+    startCommand: "php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=$PORT"
+    envVars:
+      - key: APP_KEY
+        generateValue: true
