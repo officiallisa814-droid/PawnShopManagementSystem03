@@ -13,6 +13,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\NotificationController;
 use App\Models\Customer;
 use App\Models\PawnItem;
 
@@ -37,6 +38,7 @@ Route::get('/', function () {
 // 'can:xxx' = ត្រួតពិនិត្យសិទ្ធិតាម config/roles.php
 // ==========================================================
 Route::middleware(['auth', 'active'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications');
 
     // ----- Profile (គ្រប់ Role) -----
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');

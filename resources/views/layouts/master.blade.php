@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Pawn Shop Management System</title>
+    <!-- <link rel="stylesheet" href="{{ asset('public/css/sms.css') }}"> -->
 
     <link rel="icon" type="image/png" sizes="64x64" href="{{ asset('images/logo.png') }}?v=5">
     <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}?v=5">
@@ -816,6 +817,7 @@
             document.addEventListener('click', function (e) { if (!m.contains(e.target)) m.hidden = true });
         })();
     </script>
+    <script src="{{ asset('js/notifications.js') }}"></script>
 </body>
 
 </html>

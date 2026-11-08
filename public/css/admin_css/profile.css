@@ -5,7 +5,7 @@
     font-family: "Noto Sans Khmer", "Inter", "Segoe UI", sans-serif;
 }
 #pf-app {
-    max-width: 980px;
+    max-width: 100%;
     margin: 0 auto;
     color: #0f172a;
 }
