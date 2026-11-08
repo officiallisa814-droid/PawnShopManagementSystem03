@@ -18,3 +18,6 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader
 
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Start command for Laravel inside Docker container
+CMD php artisan migrate --force && php artisan db:seed --force && php artisan serve --host=0.0.0.0 --port=$PORT
