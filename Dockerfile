@@ -1,8 +1,18 @@
+# Stage 1: Build Composer dependencies
 FROM composer:latest AS vendor
 WORKDIR /app
-COPY . .
+COPY composer.json composer.lock ./
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
+# Stage 2: Build Node / Vite assets
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Stage 3: Final PHP Apache Image
 FROM php:8.4-apache
 
 # Install system dependencies
@@ -29,6 +39,9 @@ COPY . /var/www/html
 
 # Copy vendor folder from composer stage
 COPY --from=vendor /app/vendor /var/www/html/vendor
+
+# Copy built frontend assets from node stage
+COPY --from=frontend-builder /app/public/build /var/www/html/public/build
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html \
