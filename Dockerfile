@@ -3,7 +3,7 @@ WORKDIR /app
 COPY . .
 RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
-FROM php:8.2-apache
+FROM php:8.4-apache
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
