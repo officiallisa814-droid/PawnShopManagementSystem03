@@ -22,7 +22,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy application files
+# Copy application files (รวมถึง public/build ที่เพิ่ง build เสร็จ)
 COPY . /var/www/html
 
 # Install dependencies via composer
