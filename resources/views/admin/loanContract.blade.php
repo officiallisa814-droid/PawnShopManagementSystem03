@@ -28,11 +28,11 @@
             <input type="search" id="lc-search" placeholder="Search contract no, customer, item…">
             <select id="lc-status" class="lc-select">
                 <option value="">All status / គ្រប់ស្ថានភាព</option>
-                <option value="active">Active</option>
-                <option value="renewed">Renewed</option>
-                <option value="redeemed">Redeemed</option>
-                <option value="expired">Expired</option>
-                <option value="auctioned">Auctioned</option>
+                <option value="active">Active <span>(កំពុងដំណើរការ)</span></option>
+                <option value="renewed">Renewed <span>(បានបន្តកិច្ចសន្យា)</span></option>
+                <option value="redeemed">Redeemed <span>(បានលោះយកវិញ)</span></option>
+                <option value="expired">Expired <span>(អស់សុពលភាព)</span></option>
+                <option value="auctioned">Auctioned <span>(បានដាក់ឡាយឡុង)</span></option>
             </select>
         </div>
 

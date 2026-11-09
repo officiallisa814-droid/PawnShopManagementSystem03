@@ -127,10 +127,13 @@
                 let opts = '<option value="">Actions</option>';
                 if (c.is_open)
                     opts +=
-                        '<option value="renew">Renew Contract</option><option value="extend">Extend Loan Period</option><option value="redeem">Close Contract</option>';
+                        '<option value="renew">បន្តកិច្ចសន្យា</option>' +
+                        '<option value="extend">ពន្យារពេលកម្ចី</option>' +
+                        '<option value="redeem">បិទកិច្ចសន្យា (ប្រគល់ទំនិញវិញ)</option>';
                 if (c.status === "expired")
-                    opts += '<option value="auction">Auction item</option>';
-                opts += '<option value="print">Print Pawn Agreement</option>';
+                    opts += '<option value="auction">ដាក់ដេញថ្លៃ</option>';
+                opts += '<option value="print">បោះពុម្ពកិច្ចសន្យា</option>';
+
                 return `<tr class="lc-row" data-id="${c.id}" tabindex="0" title="ចុចដើម្បីមើលកាលវិភាគបង់ប្រាក់">
         <td><strong>${esc(c.contract_no)}</strong></td>
         <td>${esc(c.customer?.customer_name)}<br><small>${esc(c.customer?.phone_number)}</small></td>
