@@ -1,6 +1,11 @@
+FROM composer:latest AS vendor
+WORKDIR /app
+COPY . .
+RUN composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
+
 FROM php:8.2-apache
 
-# Install system dependencies & Composer
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -16,22 +21,19 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 # Install PHP extensions
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy existing application directory contents
+# Copy application files from current directory
 COPY . /var/www/html
 
-# Copy existing application directory permissions
+# Copy vendor folder from composer stage
+COPY --from=vendor /app/vendor /var/www/html/vendor
+
+# Set permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
-
-# Install dependencies via composer
-RUN composer install --no-dev --optimize-autoloader
 
 # Set Apache DocumentRoot to public
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
